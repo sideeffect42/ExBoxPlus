@@ -133,20 +133,29 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	}
 
 	private void connectCommand() throws Exception {
-		FileDialog	fd = new FileDialog(this, "Connect");
+		FileDialog fd = new FileDialog(this, "Connect");
+		fd.setFilenameFilter(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				// check if it's a class file
+				return name.endsWith(".class");
+			}
+		});
 		fd.setFile("*Server.class");
 		fd.setDirectory(pathtocompiled);
 		fd.setVisible(true);
-		String	name = fd.getFile();
-		ServerFactory sf = new	ServerFactory();
-		command = sf.createServer(name);
-		setTitle("ExBox connected to " + name);
+		String directory = fd.getDirectory(), name = fd.getFile();
+		if (directory != null && name != null) {
+			ServerFactory sf = new ServerFactory();
+			command = sf.createServer(directory, name);
+			setTitle("ExBox connected to " + name);
+		}
 	}
 
 	private void openFile()  throws Exception {
-		FileDialog	fd = new FileDialog(this, "Open");
+		FileDialog fd = new FileDialog(this, "Open");
 		fd.setVisible(true);
-		String	name = fd.getFile();
+		String name = fd.getFile();
 		BufferedReader br = new BufferedReader(
 				new InputStreamReader(
 						new FileInputStream(fd.getDirectory() + "/" + name), "ISO-8859-1"));
