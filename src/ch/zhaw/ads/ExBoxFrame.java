@@ -4,8 +4,10 @@
  * JFC ExBox application
  *
  * @author K.Rege
+ * @author T. Yoshi
  * @version	1.00 2014/2/3
  * @version	1.01 2016/8/2
+ * @version 1.10 2016/10/02
  */
 
 package ch.zhaw.ads;
@@ -132,6 +134,11 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		}
 	}
 
+	private void setServer(CommandExecutor server) {
+		this.command = server;
+		this.setTitle(("ExBox connected to " + server.getClass().getCanonicalName()));
+	}
+
 	private void connectCommand() throws Exception {
 		FileDialog fd = new FileDialog(this, "Connect");
 		fd.setFilenameFilter(new FilenameFilter() {
@@ -147,8 +154,20 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		String directory = fd.getDirectory(), name = fd.getFile();
 		if (directory != null && name != null) {
 			ServerFactory sf = new ServerFactory();
-			command = sf.createServer(directory, name);
-			setTitle("ExBox connected to " + name);
+			CommandExecutor server = sf.createServer(directory, name);
+			this.setServer(server);
+		}
+	}
+
+	public void connectCommand(String classBinaryName) throws Exception {
+		ServerFactory sf = new ServerFactory();
+		CommandExecutor server = sf.createServer(classBinaryName);
+
+		if (server != null) {
+			this.setServer(server);
+		} else {
+			// invalid classBinaryName
+			System.err.println(("Could not load class with binary name '" + classBinaryName + "' as server!"));
 		}
 	}
 

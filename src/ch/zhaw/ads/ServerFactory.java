@@ -2,7 +2,9 @@
  * ServerFactory -- Praktikum Experimentierkasten --
  *
  * @author K. Rege
+ * @author T. Yoshi
  * @version 1.0 -- Factory zur Erstellung von Server Objekten
+ * @version 1.1 -- Logik zum erraten des Binary Names der Klasse eingebaut
  */
 package ch.zhaw.ads;
 
@@ -13,6 +15,15 @@ import java.nio.file.Paths;
 
 public class ServerFactory {
 
+	public CommandExecutor createServer(String classBinaryName) throws Exception {
+		Class clazz = Class.forName(classBinaryName);
+		if (clazz != null) {
+			return (CommandExecutor)clazz.newInstance();
+		} else {
+			throw new ClassNotFoundException(("There is no class with binary name '" + classBinaryName + "' in the class path."));
+		}
+	}
+
     public CommandExecutor createServer(String directory, String name) throws Exception {
 		String className = name.substring(0, name.indexOf('.'));
 		directory = directory.replaceAll("/+", "/");
@@ -21,10 +32,10 @@ public class ServerFactory {
 
 		String packageName = "";
 		boolean foundClass = false;
-		Class clazz = null;
+		CommandExecutor server = null;
 
 		try {
-			clazz = Class.forName("ch.zhaw.ads." + className);
+			server = this.createServer(("ch.zhaw.ads." + className));
 			foundClass = true;
 		} catch (ClassNotFoundException e1) {
 			while (!foundClass && pathComponents.size() > 0) {
@@ -35,7 +46,8 @@ public class ServerFactory {
 
 					packageName = (newPrefix + "." + packageName);
 
-					clazz = Class.forName((packageName + className));
+					String classBinaryName = (packageName + className);
+					server = this.createServer(classBinaryName);
 					foundClass = true;
 				} catch (ClassNotFoundException e) {
 					System.out.println(e.getMessage());
@@ -43,10 +55,6 @@ public class ServerFactory {
 			}
  		}
 
-		if (!foundClass) {
-			return null;
-		}
-
-        return (CommandExecutor)clazz.newInstance();
+		return (foundClass ? server : null);
     }
 }
