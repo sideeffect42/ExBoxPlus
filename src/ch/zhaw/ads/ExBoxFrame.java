@@ -39,13 +39,15 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	private static final double SCALE = 1;
 	private static final String FILE_ENCODING = "ISO-8859-1";
 	private String pathtocompiled;
-	private JMenuItem connect, open;
+	private JMenuItem connect, open, textView, graphicView;
 	private JButton enter;
 	private JTextField arguments;
 	private JComboBox history;
 	private JTextArea output;
 	private JScrollPane scrollPane;
 	private CommandExecutor command;
+	private boolean graphicOn;
+	private GraphicPanel graphic;
 
 	public static void setFontSize(int size) {
 		Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
@@ -78,6 +80,16 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 
 		menuFile.add(menuFileExit);
 		menuBar.add(menuFile);
+
+		JMenu menuView = new JMenu("View");
+
+		menuBar.add(menuView);
+		textView = new JMenuItem("Text");
+		textView.addActionListener(this);
+		menuView.add(textView);
+		graphicView = new JMenuItem("Graphic");
+		graphicView.addActionListener(this);
+		menuView.add(graphicView);
 
 		JMenu menuServer = new JMenu("Server");
 		menuBar.add(menuServer);
@@ -158,7 +170,11 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 			}
 
 			String res = command.execute(args);
-			output.append(res);
+			if (graphicOn) {
+				graphic.setFigure(res);
+			} else {
+				output.append(res);
+			}
 		}
 	}
 
@@ -260,6 +276,26 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		}
 	}
 
+	private void setGraphicView() {
+		if (graphicOn) return;
+		remove(scrollPane);
+		graphic = new GraphicPanel();
+		output.removeNotify();
+		add(BorderLayout.CENTER, graphic);
+		graphicOn = true;
+		validate();
+		repaint();
+	}
+
+	private void setTextView() {
+		if (!graphicOn) return;
+		remove(graphic);
+		add(BorderLayout.CENTER, scrollPane);
+		graphicOn = false;
+		validate();
+		repaint();
+	}
+
 	public void	actionPerformed(ActionEvent	e) {
 		try {
 			if ((e.getSource() == arguments) || (e.getSource() == enter)) {
@@ -268,6 +304,10 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 				this.connectCommand();
 			} else if (e.getSource() == open) {
 				this.openFile();
+			} else if (e.getSource() == textView) {
+				setTextView();
+			} else if (e.getSource() == graphicView) {
+				setGraphicView();
 			}
 		} catch (Throwable ex) {
 			ex.printStackTrace();
