@@ -1,15 +1,12 @@
 package ch.zhaw.ads;
 
-
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 
-
 public class GraphicPanel extends JPanel {
-
-	String figure;
+	private static final long serialVersionUID = 1L;
+	private String figure;
 
 	public void setFigure(String figure) {
 		this.figure = figure;

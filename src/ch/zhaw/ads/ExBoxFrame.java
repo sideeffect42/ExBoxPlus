@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Set;
 import javax.swing.*;
@@ -222,7 +223,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		this.readFile(path);
 	}
 
-	public void readFile(String path) throws FileNotFoundException, UnsupportedEncodingException {
+	public void readFile(String path) throws Exception {
 		FileInputStream fis = new FileInputStream(path);
 		BufferedReader br = null;
 		try {
@@ -244,10 +245,11 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		}
 	}
 
-	public void processCommadsFile(String path) throws FileNotFoundException, UnsupportedEncodingException {
+	public void processCommadsFile(String path) throws IOException, FileNotFoundException, UnsupportedEncodingException {
 		FileInputStream fis = new FileInputStream(path);
+		BufferedReader br = null;
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(fis, FILE_ENCODING));
+			br = new BufferedReader(new InputStreamReader(fis, FILE_ENCODING));
 			String line;
 			while ((line = br.readLine()) != null) {
 				// pass line to interpreter
@@ -261,6 +263,9 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 				}
 			}
 		} finally {
+			if (br != null) {
+				br.close();
+			}
 			if (fis != null) {
 				fis.close();
 			}
