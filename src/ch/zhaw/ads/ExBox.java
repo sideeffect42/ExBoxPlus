@@ -1,12 +1,20 @@
 /**
  * @author K. Rege
+ * @author T. Yoshi
  * @version 1.0 -- Experimentierkasten
+ * @version 1.1 -- Added support for arguments
  */
 package ch.zhaw.ads;
 
 import java.util.HashMap;
 
 public class ExBox {
+
+	private static final String HELP_ARG = "help";
+	private static final String INIT_CLASS_ARG = "class";
+	private static final String INIT_FILE_LOAD_ARG = "file";
+	private static final String INIT_COMMANDS_LOAD_ARG = "in";
+
 
     public static void main(String[] args) throws Exception {
 		HashMap<String, String> parameters = new HashMap<String, String>();
@@ -17,10 +25,19 @@ public class ExBox {
 			for (; i < argc; i++) {
 				if (key == null || key.length() < 1) {
 					// new argument
-					if ("-class".equals(args[i])) {
+					if (("-" + HELP_ARG).equals(args[i])) {
+						// Print help
+						System.out.println("HELP!!");
+
+						// If help is processed, stop application
+						System.exit(0);
+					} else if (("-" + INIT_CLASS_ARG).equals(args[i])) {
 						key = args[i]; // this is an argument option
 						continue;
-					} else if ("-file".equals(args[i])) {
+					} else if (("-" + INIT_FILE_LOAD_ARG).equals(args[i])) {
+						key = args[i]; // this is an argument option
+						continue;
+					} else if (("-" + INIT_COMMANDS_LOAD_ARG).equals(args[i])) {
 						key = args[i]; // this is an argument option
 						continue;
 					} else {
@@ -34,10 +51,12 @@ public class ExBox {
 						break;
 					}
 
-					if ("-class".equals(key)) {
-						parameters.put("class", args[i]);
-					} else if ("-file".equals(key)) {
-						parameters.put("file", args[i]);
+					if (("-" + INIT_CLASS_ARG).equals(key)) {
+						parameters.put(INIT_CLASS_ARG, args[i]);
+					} else if (("-" + INIT_FILE_LOAD_ARG).equals(key)) {
+						parameters.put(INIT_FILE_LOAD_ARG, args[i]);
+					} else if (("-" + INIT_COMMANDS_LOAD_ARG).equals(key)) {
+						parameters.put(INIT_COMMANDS_LOAD_ARG, args[i]);
 					}
 				}
 				key = "";
@@ -48,17 +67,24 @@ public class ExBox {
         f.setVisible(true);
 
 		// Load specified server
-		if (parameters.containsKey("class")) {
-			String classBinaryName = parameters.get("class");
+		if (parameters.containsKey(INIT_CLASS_ARG)) {
+			String classBinaryName = parameters.get(INIT_CLASS_ARG);
 			System.out.println("Loading server '" + classBinaryName + "'...");
 			f.connectCommand(classBinaryName);
 		}
 
 		// Load specified testing file
-		if (parameters.containsKey("file")) {
-			String testingFilePath = parameters.get("file");
+		if (parameters.containsKey(INIT_FILE_LOAD_ARG)) {
+			String testingFilePath = parameters.get(INIT_FILE_LOAD_ARG);
 			System.out.println("Loading testing file '" + testingFilePath + "'...");
 		    f.readFile(testingFilePath);
+		}
+
+		// Load commands file
+		if (parameters.containsKey(INIT_COMMANDS_LOAD_ARG)) {
+			String commandsFilePath = parameters.get(INIT_COMMANDS_LOAD_ARG);
+			System.out.println("Loading commands file '" + commandsFilePath + "'...");
+			f.processCommadsFile(commandsFilePath);
 		}
     }
 }

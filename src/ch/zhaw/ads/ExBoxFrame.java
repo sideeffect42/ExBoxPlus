@@ -27,7 +27,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Set;
 import javax.swing.*;
 
@@ -35,6 +37,7 @@ import javax.swing.*;
 public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	private static final long serialVersionUID = 1L;
 	private static final double SCALE = 1;
+	private static final String FILE_ENCODING = "ISO-8859-1";
 	private String pathtocompiled;
 	private JMenuItem connect, open;
 	private JButton enter;
@@ -87,7 +90,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		open.addActionListener(this);
 		open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK));
 		menuFile.insert(open, 0);
-		setJMenuBar(menuBar);
+		this.setJMenuBar(menuBar);
 	}
 
 	private void initComponents() {
@@ -134,12 +137,12 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		// if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
 		// 	pathtocompiled = pathtocompiled.substring(1);
 		// }
-		setFontSize((int) (11 * SCALE));
-		setSize(new	Dimension((int) (400 * SCALE), (int) (400 * SCALE)));
-		setTitle("ExBox");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		initMenu();
-		initComponents();
+		setFontSize((int)(11 * SCALE));
+		this.setSize(new Dimension((int)(400 * SCALE), (int)(400 * SCALE)));
+		this.setTitle("ExBox");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.initMenu();
+		this.initComponents();
 	}
 
 	private void error(String s) {
@@ -147,12 +150,13 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	}
 
 	private void interpret(String args) throws Exception {
-		if (!arguments.getText().equals(history.getItemAt(0)) && !arguments.getText().equals(history.getSelectedItem())) {
-			history.insertItemAt(arguments.getText(), 0);
-		}
 		if (command == null) {
 			error("no Server connected");
 		} else {
+			if (!arguments.getText().equals(history.getItemAt(0)) && !arguments.getText().equals(history.getSelectedItem())) {
+				history.insertItemAt(arguments.getText(), 0);
+			}
+
 			String res = command.execute(args);
 			output.append(res);
 		}
@@ -202,10 +206,11 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		this.readFile(path);
 	}
 
-	public void readFile(String path) throws Exception {
+	public void readFile(String path) throws FileNotFoundException, UnsupportedEncodingException {
+		FileInputStream fis = new FileInputStream(path);
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "ISO-8859-1"));
+			br = new BufferedReader(new InputStreamReader(fis, FILE_ENCODING));
 			StringBuffer b = new StringBuffer();
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -217,30 +222,56 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 			if (br != null) {
 				br.close();
 			}
+			if (fis != null) {
+				fis.close();
+			}
+		}
+	}
+
+	public void processCommadsFile(String path) throws FileNotFoundException, UnsupportedEncodingException {
+		FileInputStream fis = new FileInputStream(path);
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(fis, FILE_ENCODING));
+			String line;
+			while ((line = br.readLine()) != null) {
+				// pass line to interpreter
+				try {
+					this.interpret(line);
+				} catch (Exception e) {
+					System.err.println("Could not correctly interpret the line:");
+					System.err.println(line);
+					System.err.println("Exception was:");
+					System.err.println(e.getMessage());
+				}
+			}
+		} finally {
+			if (fis != null) {
+				fis.close();
+			}
 		}
 	}
 
 	public void	itemStateChanged(ItemEvent e) {
 		try {
-			arguments.setText((String)e.getItem());
-			interpret(arguments.getText());
+			this.arguments.setText((String)e.getItem());
+			this.interpret(arguments.getText());
 		} catch (Throwable ex) {
-			error(ex.toString());
+			this.error(ex.toString());
 		}
 	}
 
 	public void	actionPerformed(ActionEvent	e) {
 		try {
 			if ((e.getSource() == arguments) || (e.getSource() == enter)) {
-				interpret(arguments.getText());
+				this.interpret(arguments.getText());
 			} else if (e.getSource() == connect) {
-				connectCommand();
+				this.connectCommand();
 			} else if (e.getSource() == open) {
-				openFile();
+				this.openFile();
 			}
 		} catch (Throwable ex) {
 			ex.printStackTrace();
-			error(ex.toString());
+			this.error(ex.toString());
 		}
 	}
 
