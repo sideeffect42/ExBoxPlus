@@ -70,7 +70,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		JMenuItem menuFileExit = new JMenuItem();
 		menuFile.setText("File");
 		menuFileExit.setText("Exit");
-		menuFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
+		menuFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK));
 
 		// Add action listener.for the menu	button
 		menuFileExit.addActionListener(new ActionListener() {
