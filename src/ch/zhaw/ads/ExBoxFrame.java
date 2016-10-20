@@ -86,9 +86,11 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 
 		menuBar.add(menuView);
 		textView = new JMenuItem("Text");
+		textView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Event.CTRL_MASK));
 		textView.addActionListener(this);
 		menuView.add(textView);
 		graphicView = new JMenuItem("Graphic");
+		graphicView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Event.CTRL_MASK));
 		graphicView.addActionListener(this);
 		menuView.add(graphicView);
 
