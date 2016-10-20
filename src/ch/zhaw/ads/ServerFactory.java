@@ -6,6 +6,7 @@
  * @version 1.0 -- Factory zur Erstellung von Server Objekten
  * @version 1.1 -- Logik zum erraten des Binary Names der Klasse eingebaut
  */
+
 package ch.zhaw.ads;
 
 import java.util.Arrays;
@@ -19,11 +20,12 @@ public class ServerFactory {
 		if (clazz != null) {
 			return (CommandExecutor)clazz.newInstance();
 		} else {
-			throw new ClassNotFoundException(("There is no class with binary name '" + classBinaryName + "' in the class path."));
+			throw new ClassNotFoundException(("There is no class with binary name '"
+											  + classBinaryName + "' in the class path."));
 		}
 	}
 
-    public CommandExecutor createServer(String directory, String name) throws Exception {
+	public CommandExecutor createServer(String directory, String name) throws Exception {
 		String className = name.substring(0, name.indexOf('.'));
 		directory = directory.replaceAll("/+", "/");
 
@@ -52,8 +54,8 @@ public class ServerFactory {
 					// ignore
 				}
 			}
- 		}
+		}
 
 		return (foundClass ? server : null);
-    }
+	}
 }

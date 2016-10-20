@@ -4,6 +4,7 @@
  * @version 1.0 -- Experimentierkasten
  * @version 1.1 -- Added support for arguments
  */
+
 package ch.zhaw.ads;
 
 import java.util.HashMap;
@@ -17,8 +18,7 @@ public class ExBox {
 	private static final String INIT_TEXT_MODE = "xt";
 	private static final String INIT_GRAPHICS_MODE = "xg";
 
-
-    public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {
 		HashMap<String, String> parameters = new HashMap<String, String>();
 
 		{
@@ -57,7 +57,7 @@ public class ExBox {
 							));
 						}
 					} else {
-						System.err.println(("Unknown argument '" + args[i] + "'."));
+						System.err.println(("Unknown option '" + args[i] + "'."));
 					}
 				} else {
 					// this is an option argument
@@ -79,8 +79,8 @@ public class ExBox {
 			}
 		}
 
-        ExBoxFrame f = new ExBoxFrame();
-        f.setVisible(true);
+		ExBoxFrame f = new ExBoxFrame();
+		f.setVisible(true);
 
 		// Load specified server
 		if (parameters.containsKey(INIT_CLASS_ARG)) {
@@ -93,7 +93,7 @@ public class ExBox {
 		if (parameters.containsKey(INIT_FILE_LOAD_ARG)) {
 			String testingFilePath = parameters.get(INIT_FILE_LOAD_ARG);
 			System.out.println("Loading testing file '" + testingFilePath + "'...");
-		    f.readFile(testingFilePath);
+			f.readFile(testingFilePath);
 		}
 
 		// Load commands file
@@ -113,5 +113,4 @@ public class ExBox {
 			}
 		}
 	}
-    }
 }

@@ -5,8 +5,8 @@
  *
  * @author K.Rege
  * @author T. Yoshi
- * @version	1.00 2014/2/3
- * @version	1.01 2016/8/2
+ * @version 1.00 2014/2/3
+ * @version 1.01 2016/8/2
  * @version 1.10 2016/10/02
  */
 
@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Set;
 import javax.swing.*;
-
 
 public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	private static final long serialVersionUID = 1L;
@@ -116,7 +115,6 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		scrollPane = new JScrollPane(output);
 		add(BorderLayout.CENTER, scrollPane);
 
-
 		// Create bottom panel
 		Panel bottomPanel = new Panel(new BorderLayout());
 
@@ -168,7 +166,8 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		if (command == null) {
 			error("no Server connected");
 		} else {
-			if (!arguments.getText().equals(history.getItemAt(0)) && !arguments.getText().equals(history.getSelectedItem())) {
+			if (!arguments.getText().equals(history.getItemAt(0))
+				&& !arguments.getText().equals(history.getSelectedItem())) {
 				history.insertItemAt(arguments.getText(), 0);
 			}
 
@@ -214,7 +213,8 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 			this.setServer(server);
 		} else {
 			// invalid classBinaryName
-			System.err.println(("Could not load class with binary name '" + classBinaryName + "' as server!"));
+			System.err.println(("Could not load class with binary name '"
+								+ classBinaryName + "' as server!"));
 		}
 	}
 
@@ -247,7 +247,8 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		}
 	}
 
-	public void processCommadsFile(String path) throws IOException, FileNotFoundException, UnsupportedEncodingException {
+	public void processCommadsFile(String path) throws IOException,
+					FileNotFoundException, UnsupportedEncodingException {
 		FileInputStream fis = new FileInputStream(path);
 		BufferedReader br = null;
 		try {
@@ -258,7 +259,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 				try {
 					this.interpret(line);
 				} catch (Exception e) {
-					System.err.println("Could not correctly interpret the line:");
+					System.err.println("Could not correctly interpret line:");
 					System.err.println(line);
 					System.err.println("Exception was:");
 					System.err.println(e.getMessage());

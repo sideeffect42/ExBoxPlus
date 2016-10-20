@@ -1,6 +1,5 @@
 package ch.zhaw.ads;
 
-
 public class Turtle {
 
 	private StringBuffer b;
@@ -48,4 +47,5 @@ public class Turtle {
 	public void turn(double turnAngle) {
 		angle += turnAngle * Math.PI / 180;
 	}
+
 }
