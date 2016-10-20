@@ -283,7 +283,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		}
 	}
 
-	private void setGraphicView() {
+	public void setGraphicView() {
 		if (graphicOn) return;
 		remove(scrollPane);
 		graphic = new GraphicPanel();
@@ -294,7 +294,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		repaint();
 	}
 
-	private void setTextView() {
+	public void setTextView() {
 		if (!graphicOn) return;
 		remove(graphic);
 		add(BorderLayout.CENTER, scrollPane);
@@ -312,9 +312,9 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 			} else if (e.getSource() == open) {
 				this.openFile();
 			} else if (e.getSource() == textView) {
-				setTextView();
+				this.setTextView();
 			} else if (e.getSource() == graphicView) {
-				setGraphicView();
+				this.setGraphicView();
 			}
 		} catch (Throwable ex) {
 			ex.printStackTrace();

@@ -14,6 +14,8 @@ public class ExBox {
 	private static final String INIT_CLASS_ARG = "class";
 	private static final String INIT_FILE_LOAD_ARG = "file";
 	private static final String INIT_COMMANDS_LOAD_ARG = "in";
+	private static final String INIT_TEXT_MODE = "xt";
+	private static final String INIT_GRAPHICS_MODE = "xg";
 
 
     public static void main(String[] args) throws Exception {
@@ -40,6 +42,20 @@ public class ExBox {
 					} else if (("-" + INIT_COMMANDS_LOAD_ARG).equals(args[i])) {
 						key = args[i]; // this is an argument option
 						continue;
+					} else if (("-" + INIT_TEXT_MODE).equals(args[i])
+							|| ("-" + INIT_GRAPHICS_MODE).equals(args[i])) {
+						if (!parameters.containsKey("mode")) {
+							if (("-" + INIT_TEXT_MODE).equals(args[i])) {
+								parameters.put("mode", "text");
+							} else if (("-" + INIT_GRAPHICS_MODE).equals(args[i])) {
+								parameters.put("mode", "graphics");
+							}
+						} else {
+							System.err.println(String.format(
+								"Options '-{}' and '-{}' are mutally exclusive.",
+								INIT_TEXT_MODE, INIT_GRAPHICS_MODE
+							));
+						}
 					} else {
 						System.err.println(("Unknown argument '" + args[i] + "'."));
 					}
@@ -86,5 +102,16 @@ public class ExBox {
 			System.out.println("Loading commands file '" + commandsFilePath + "'...");
 			f.processCommadsFile(commandsFilePath);
 		}
+
+		// Set mode
+		if (parameters.containsKey("mode")) {
+			String mode = parameters.get("mode");
+			if ("text".equals(mode)) {
+				f.setTextView();
+			} else if ("graphics".equals(mode)) {
+				f.setGraphicView();
+			}
+		}
+	}
     }
 }
