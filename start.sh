@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-java ch.zhaw.ads.ExBox
+java ch.zhaw.ads.ExBox $@
