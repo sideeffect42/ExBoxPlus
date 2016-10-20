@@ -1,12 +1,10 @@
 package ch.zhaw;
 
-import java.util.*;
-
-public interface Stack {
-	public void push(Object x);
-	public Object pop();
+public interface Stack<E> {
+	public void push(E x);
+	public E pop();
 	public boolean isEmpty();
-	public Object peek();
+	public E peek();
 	public void removeAll();
 	public boolean isFull();
 }

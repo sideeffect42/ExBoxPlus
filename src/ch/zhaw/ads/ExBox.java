@@ -4,9 +4,6 @@
  */
 package ch.zhaw.ads;
 
-import java.awt.*;
-import java.io.*;
-import java.awt.event.*;
 import java.util.HashMap;
 
 public class ExBox {
@@ -20,26 +17,27 @@ public class ExBox {
 			for (; i < argc; i++) {
 				if (key == null || key.length() < 1) {
 					// new argument
-					switch (args[i]) {
-					case "-class":
-						key = args[i];
+					if ("-class".equals(args[i])) {
+						key = args[i]; // this is an argument option
 						continue;
-
-					default:
+					} else if ("-file".equals(args[i])) {
+						key = args[i]; // this is an argument option
+						continue;
+					} else {
 						System.err.println(("Unknown argument '" + args[i] + "'."));
 					}
 				} else {
 					// this is an option argument
 					if (args[i].startsWith("-")) {
-						// this option argument has no option
-						System.err.println(("Argument '" + key + "' is an option argument, but no option was given!"));
+						// this option has no argument
+						System.err.println(("Option '" + key + "' requires an argument, but none was given!"));
 						break;
 					}
 
-					switch (key) {
-					case "-class":
+					if ("-class".equals(key)) {
 						parameters.put("class", args[i]);
-						break;
+					} else if ("-file".equals(key)) {
+						parameters.put("file", args[i]);
 					}
 				}
 				key = "";
@@ -49,9 +47,18 @@ public class ExBox {
         ExBoxFrame f = new ExBoxFrame();
         f.setVisible(true);
 
+		// Load specified server
 		if (parameters.containsKey("class")) {
-			// Load provided server
-			f.connectCommand(parameters.get("class"));
+			String classBinaryName = parameters.get("class");
+			System.out.println("Loading server '" + classBinaryName + "'...");
+			f.connectCommand(classBinaryName);
+		}
+
+		// Load specified testing file
+		if (parameters.containsKey("file")) {
+			String testingFilePath = parameters.get("file");
+			System.out.println("Loading testing file '" + testingFilePath + "'...");
+		    f.readFile(testingFilePath);
 		}
     }
 }

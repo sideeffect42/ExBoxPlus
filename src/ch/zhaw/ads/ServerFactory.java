@@ -11,12 +11,11 @@ package ch.zhaw.ads;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.io.File;
-import java.nio.file.Paths;
 
 public class ServerFactory {
 
 	public CommandExecutor createServer(String classBinaryName) throws Exception {
-		Class clazz = Class.forName(classBinaryName);
+		Class<?> clazz = Class.forName(classBinaryName);
 		if (clazz != null) {
 			return (CommandExecutor)clazz.newInstance();
 		} else {
@@ -28,7 +27,7 @@ public class ServerFactory {
 		String className = name.substring(0, name.indexOf('.'));
 		directory = directory.replaceAll("/+", "/");
 
-		ArrayList<String> pathComponents = new ArrayList(Arrays.asList(directory.toString().split(File.separator)));
+		ArrayList<String> pathComponents = new ArrayList<String>(Arrays.asList(directory.toString().split(File.separator)));
 
 		String packageName = "";
 		boolean foundClass = false;
@@ -50,7 +49,7 @@ public class ServerFactory {
 					server = this.createServer(classBinaryName);
 					foundClass = true;
 				} catch (ClassNotFoundException e) {
-					System.out.println(e.getMessage());
+					// ignore
 				}
 			}
  		}

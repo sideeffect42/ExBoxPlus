@@ -1,6 +1,7 @@
 package ch.zhaw;
 
-import java.util.*;
+import java.util.List;
+import java.util.LinkedList;
 import ch.zhaw.Stack;
 
 /** Implementation des Abstrakten
@@ -9,18 +10,18 @@ import ch.zhaw.Stack;
 	Klasse java.util.LinkedList
 */
 
-public class StackLinkedList implements Stack {
-	private List list;
+public class StackLinkedList<E> implements Stack<E> {
+	private List<E> list;
 
 	public StackLinkedList() {
 		removeAll();
 	}
 
-	public void push(Object x) {
+	public void push(E x) {
 		list.add(0, x);
 	}
 
-	public Object pop() {
+	public E pop() {
 		if (isEmpty()) {
 			return null;
 		};
@@ -31,7 +32,7 @@ public class StackLinkedList implements Stack {
 		return list.isEmpty();
 	}
 
-	public Object peek() {
+	public E peek() {
 		if (isEmpty()) {
 			return null;
 		};
@@ -39,7 +40,7 @@ public class StackLinkedList implements Stack {
 	}
 
 	public void removeAll() {
-		list = new LinkedList();
+		list = new LinkedList<E>();
 	}
 
 	public boolean isFull() {

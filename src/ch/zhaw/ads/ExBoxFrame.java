@@ -12,16 +12,28 @@
 
 package ch.zhaw.ads;
 
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Event;
+import java.awt.FileDialog;
+import java.awt.Font;
+import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
+import java.io.InputStreamReader;
+import java.util.Set;
+import javax.swing.*;
 
 
 public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
+	private static final long serialVersionUID = 1L;
 	private static final double SCALE = 1;
 	private String pathtocompiled;
 	private JMenuItem connect, open;
@@ -52,6 +64,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		JMenuItem menuFileExit = new JMenuItem();
 		menuFile.setText("File");
 		menuFileExit.setText("Exit");
+		menuFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
 
 		// Add action listener.for the menu	button
 		menuFileExit.addActionListener(new ActionListener() {
@@ -65,33 +78,46 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 
 		JMenu menuServer = new JMenu("Server");
 		menuBar.add(menuServer);
-		connect = new JMenuItem("Connect");
+		connect = new JMenuItem("Connect...");
 		connect.addActionListener(this);
+		connect.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Event.CTRL_MASK));
 		menuServer.add(connect);
 
 		open = new JMenuItem("Open...");
 		open.addActionListener(this);
+		open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK));
 		menuFile.insert(open, 0);
 		setJMenuBar(menuBar);
 	}
 
 	private void initComponents() {
 		setLayout(new BorderLayout());
+
+		// Add output TextPanel
 		output = new JTextArea();
 		scrollPane = new JScrollPane(output);
 		add(BorderLayout.CENTER, scrollPane);
 
-		Panel panel = new Panel(new BorderLayout());
+
+		// Create bottom panel
+		Panel bottomPanel = new Panel(new BorderLayout());
+
+		// Input field
 		arguments = new JTextField();
 		arguments.addActionListener(this);
-		panel.add(BorderLayout.CENTER, arguments);
+		bottomPanel.add(BorderLayout.CENTER, arguments);
+
+		// Enter button
 		enter = new JButton("enter");
 		enter.addActionListener(this);
-		panel.add(BorderLayout.EAST, enter);
+		bottomPanel.add(BorderLayout.EAST, enter);
+
+		// History box
 		history = new JComboBox();
 		history.addItemListener(this);
-		panel.add(BorderLayout.SOUTH, history);
-		add(BorderLayout.SOUTH, panel);
+		bottomPanel.add(BorderLayout.SOUTH, history);
+
+		add(BorderLayout.SOUTH, bottomPanel);
 	}
 
 	/**
@@ -103,12 +129,11 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		pathtocompiled = getClass().getProtectionDomain().getCodeSource().getLocation().getPath().replace("%20", " ").replace(
-				"/", File.separator);
-		pathtocompiled += "ch\\zhaw\\ads";
-		if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
-			pathtocompiled = pathtocompiled.substring(1);
-		}
+		// pathtocompiled = getClass().getProtectionDomain().getCodeSource().getLocation().getPath().replace("%20", " ").replace("/", File.separator);
+		// pathtocompiled += "ch\\zhaw\\ads";
+		// if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
+		// 	pathtocompiled = pathtocompiled.substring(1);
+		// }
 		setFontSize((int) (11 * SCALE));
 		setSize(new	Dimension((int) (400 * SCALE), (int) (400 * SCALE)));
 		setTitle("ExBox");
@@ -122,8 +147,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	}
 
 	private void interpret(String args) throws Exception {
-		if (!arguments.getText().equals(history.getItemAt(0))
-				&& !arguments.getText().equals(history.getSelectedItem())) {
+		if (!arguments.getText().equals(history.getItemAt(0)) && !arguments.getText().equals(history.getSelectedItem())) {
 			history.insertItemAt(arguments.getText(), 0);
 		}
 		if (command == null) {
@@ -135,14 +159,14 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	}
 
 	private void setServer(CommandExecutor server) {
+		if (server == null) { return; }
 		this.command = server;
 		this.setTitle(("ExBox connected to " + server.getClass().getCanonicalName()));
 	}
 
 	private void connectCommand() throws Exception {
-		FileDialog fd = new FileDialog(this, "Connect");
+		FileDialog fd = new FileDialog(this, "Connect server");
 		fd.setFilenameFilter(new FilenameFilter() {
-			@Override
 			public boolean accept(File dir, String name) {
 				// check if it's a class file
 				return name.endsWith(".class");
@@ -174,22 +198,31 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	private void openFile()  throws Exception {
 		FileDialog fd = new FileDialog(this, "Open");
 		fd.setVisible(true);
-		String name = fd.getFile();
-		BufferedReader br = new BufferedReader(
-				new InputStreamReader(
-						new FileInputStream(fd.getDirectory() + "/" + name), "ISO-8859-1"));
-		StringBuffer b = new StringBuffer();
-		String line;
-		while ((line = br.readLine()) != null) {
-			b.append(line);
-			b.append('\n');
+		String path = (fd.getDirectory() + File.separator + fd.getFile());
+		this.readFile(path);
+	}
+
+	public void readFile(String path) throws Exception {
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "ISO-8859-1"));
+			StringBuffer b = new StringBuffer();
+			String line;
+			while ((line = br.readLine()) != null) {
+				b.append(line);
+				b.append('\n');
+			}
+			this.interpret(b.toString());
+		} finally {
+			if (br != null) {
+				br.close();
+			}
 		}
-		interpret(b.toString());
 	}
 
 	public void	itemStateChanged(ItemEvent e) {
 		try {
-			arguments.setText((String) e.getItem());
+			arguments.setText((String)e.getItem());
 			interpret(arguments.getText());
 		} catch (Throwable ex) {
 			error(ex.toString());

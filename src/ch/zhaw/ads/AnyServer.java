@@ -9,7 +9,6 @@ package ch.zhaw.ads;
 public class AnyServer implements CommandExecutor {
 
     //----- Dies implementiert das CommandExecutor Interface.
-    @Override
     public String execute(String command) {
         StringBuffer result = new StringBuffer(100);
         result.append("Die Eingabe war \"");
@@ -17,5 +16,4 @@ public class AnyServer implements CommandExecutor {
         result.append("\"\n");
         return (result.toString());
     }
-}//AnyServer   
-
+}//AnyServer
