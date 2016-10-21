@@ -72,9 +72,9 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		menuFileExit.setText("Exit");
 		menuFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK));
 
-		// Add action listener.for the menu	button
+		// Add action listener.for the menu button
 		menuFileExit.addActionListener(new ActionListener() {
-			public void	actionPerformed(ActionEvent	e) {
+			public void actionPerformed(ActionEvent e) {
 				ExBoxFrame.this.windowClosed();
 			}
 		});
@@ -148,7 +148,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		// pathtocompiled = getClass().getProtectionDomain().getCodeSource().getLocation().getPath().replace("%20", " ").replace("/", File.separator);
 		// pathtocompiled += "ch\\zhaw\\ads";
 		// if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
-		// 	pathtocompiled = pathtocompiled.substring(1);
+		// pathtocompiled = pathtocompiled.substring(1);
 		// }
 		setFontSize((int)(11 * SCALE));
 		this.setSize(new Dimension((int)(400 * SCALE), (int)(400 * SCALE)));
@@ -216,7 +216,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		}
 	}
 
-	private void openFile()  throws Exception {
+	private void openFile() throws Exception {
 		FileDialog fd = new FileDialog(this, "Open");
 		fd.setVisible(true);
 		String path = (fd.getDirectory() + File.separator + fd.getFile());
@@ -272,7 +272,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		}
 	}
 
-	public void	itemStateChanged(ItemEvent e) {
+	public void itemStateChanged(ItemEvent e) {
 		try {
 			this.arguments.setText((String)e.getItem());
 			this.interpret(arguments.getText());
@@ -301,7 +301,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		repaint();
 	}
 
-	public void	actionPerformed(ActionEvent	e) {
+	public void actionPerformed(ActionEvent e) {
 		try {
 			if ((e.getSource() == arguments) || (e.getSource() == enter)) {
 				this.interpret(arguments.getText());
@@ -321,7 +321,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	}
 
 	/**
-	 * Shutdown	procedure when run as an application.
+	 * Shutdown procedure when run as an application.
 	 */
 	protected void windowClosed() {
 		System.exit(0);

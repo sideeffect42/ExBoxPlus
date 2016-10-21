@@ -1,31 +1,48 @@
 SRC_DIR := ./src
-CLASSES = $(shell find "$(SRC_DIR)" -iname '*.java')
+BIN_DIR := ./bin
+
+SRCS = $(shell find "$(SRC_DIR)" -iname '*.java')
+CLASSES = $(shell find "$(SRC_DIR)" -iname '*.class')
 .SUFFIXES: .java .class
 
 # Applications
-JC = javac
-FIND = find
+MKDIR_P ?= mkdir -p
+JC ?= javac
+JAR ?= jar
+NJC ?= gcj
+FIND ?= find
+
+# Paths
+TARGET_NATIVE := $(BIN_DIR)/ExBox
+TARGET_BYTE := $(BIN_DIR)/ExBox.jar
+MANIFEST_FILE := META-INF/MANIFEST.MF
 
 # Compiler flags
-JFLAGS = -cp "$(SRC_DIR)" -g
-
+JFLAGS = -cp "$(SRC_DIR)" -target 1.5 -Xlint
 
 .java.class:
-	$(JC) $(JFLAGS) $*.java
+	$(JC) $(JFLAGS) "$*.java"
 
+.PHONY: all exbox clean
 
-all: exbox-classfiles
+%/:
+	@echo "Create directory $*"
+	$(MKDIR_P) "$*"
 
-exbox-classfiles: $(CLASSES:.java=.class) ;
+# Default is normal Java-bytecode compilation
+all: $(TARGET_BYTE) ;
 
-.PHONY: exbox
-exbox: bin/ExBox ;
+# Native compilation
+native: $(TARGET_NATIVE) ;
 
-bin/ExBox: $(shell find . -iname '*.java')
-	mkdir -p "$(dir $@)"
-	gcj --main=ch.zhaw.ads.ExBox -o "$@" $^
+.SECONDEXPANSION:
+$(TARGET_BYTE): $(SRCS:.java=.class) | $$(@D)/
+	$(JAR) -cfm "$(TARGET_BYTE)" "$(MANIFEST_FILE)" $(CLASSES)
 
-.PHONY: clean
+.SECONDEXPANSION:
+$(TARGET_NATIVE): $(SRCS) | $$(@D)/
+	$(NJC) -v --main=ch.zhaw.ads.ExBox -o "$@" $^
+
 clean:
 	$(FIND) "$(SRC_DIR)" -iname '*.class' -delete
-	rm -fr ./bin/
+	$(RM) -r "$(BIN_DIR)"
