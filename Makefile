@@ -18,7 +18,7 @@ TARGET_BYTE := $(BIN_DIR)/ExBox.jar
 MANIFEST_FILE := META-INF/MANIFEST.MF
 
 # Compiler flags
-JFLAGS = -cp "$(SRC_DIR)" -target 1.5 -Xlint
+JFLAGS = -cp "$(SRC_DIR)" -source 1.5 -target 1.5 -Xlint
 
 .java.class:
 	$(JC) $(JFLAGS) "$*.java"
