@@ -1,8 +1,11 @@
-SRC_DIR := ./src
 BIN_DIR := ./bin
+SRC_DIRS := ./src
+ifneq (,$(SRCDIR))
+SRC_DIRS += $(SRCDIR)
+endif
 
-SRCS = $(shell find "$(SRC_DIR)" -iname '*.java')
-CLASSES = $(shell find "$(SRC_DIR)" -iname '*.class')
+SRCS = $(shell find $(SRC_DIRS:%:"%") -iname '*.java')
+CLASSES = $(shell find $(SRC_DIRS:%:"%") -iname '*.class')
 .SUFFIXES: .java .class
 
 # Applications
@@ -17,8 +20,13 @@ TARGET_NATIVE := $(BIN_DIR)/ExBox
 TARGET_BYTE := $(BIN_DIR)/ExBox.jar
 MANIFEST_FILE := META-INF/MANIFEST.MF
 
+# Define stupid escape variables
+SPACE :=
+SPACE +=
+
 # Compiler flags
-JFLAGS = -cp "$(SRC_DIR)" -source 1.5 -target 1.5 -Xlint
+JFLAGS = -cp "$(subst $(SPACE),:,$(SRC_DIRS))" \
+	-source 1.5 -target 1.5 -Xlint
 
 .java.class:
 	$(JC) $(JFLAGS) "$*.java"
@@ -44,5 +52,5 @@ $(TARGET_NATIVE): $(SRCS) | $$(@D)/
 	$(NJC) -v --main=ch.zhaw.ads.ExBox -o "$@" $^
 
 clean:
-	$(FIND) "$(SRC_DIR)" -iname '*.class' -delete
+	$(FIND) $(SRC_DIRS:%:"%") -iname '*.class' -delete
 	$(RM) -r "$(BIN_DIR)"
