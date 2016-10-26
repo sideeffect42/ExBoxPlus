@@ -20,8 +20,7 @@ public class ServerFactory {
 		if (clazz != null) {
 			return (CommandExecutor)clazz.newInstance();
 		} else {
-			throw new ClassNotFoundException(("There is no class with binary name '"
-											  + classBinaryName + "' in the class path."));
+			throw new ClassNotFoundException(("There is no class with binary name '" + classBinaryName + "' in the class path."));
 		}
 	}
 
