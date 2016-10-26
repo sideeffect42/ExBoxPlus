@@ -2,10 +2,10 @@
  * Implements an AVL tree.
  * Note that all "matching" is based on the compareTo method.
  * @author Mark Allen Weiss
- * Generic K.Rege
+ * @author K. Rege - Generics
  */
-package ch.zhaw.ads;
 
+package ch.zhaw.ads;
 
 public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 
@@ -22,11 +22,11 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 	public boolean isEmpty() {
 		return root == null;
 	}
-	
+
 	public int size() {
 		return size(root);
 	}
-	
+
 	private static int size(TreeNode p) {
 		if (p == null) {
 			return 0;
@@ -34,11 +34,11 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 			return 1 + size(p.left) + size(p.right);
 		}
 	}
-	
+
 	public int height() {
 		return height(root);
 	}
-	
+
 	/**
 	 * Return the height of node t, or -1, if null.
 	 */
@@ -69,7 +69,7 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 				p.left = insertAt(p.left, element);
 				if (height(p.left) - height(p.right) == 2) {
 					if (height(p.left.left) > height(p.left.right)) {
-						 // TODO: implement
+						// TODO: implement
 					} else {
 						// TODO: implement
 					}
@@ -96,11 +96,11 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 	public T remove(T element) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	public T removeLast() {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * Rotate binary tree node with left child.
 	 * For AVL trees, this is a single rotation for case 1.
@@ -150,7 +150,7 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 		k1.right = rotateR(k1.right);
 		return rotateL(k1);
 	}
-	
+
 	public Traversal<T> traversal() {
 		// TODO: implement
 	}

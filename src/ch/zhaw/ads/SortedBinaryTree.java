@@ -9,8 +9,7 @@ public class SortedBinaryTree<T extends Comparable<T>> implements Tree<T> {
 	private TreeNode<T> insertAt(TreeNode<T> node, T x) {
 		if (node == null) {
 			return new TreeNode<T>(x);
-		}
-		else {
+		} else {
 			if (x.compareTo(node.element) <= 0)
 				node.left = insertAt(node.left, x);
 			else
@@ -29,8 +28,7 @@ public class SortedBinaryTree<T extends Comparable<T>> implements Tree<T> {
 		if (node.right != null) {
 			node.right = findRepAt(node.right);
 			return node;
-		}
-		else {
+		} else {
 			rep = node;
 			return node.left;
 		}
@@ -40,26 +38,26 @@ public class SortedBinaryTree<T extends Comparable<T>> implements Tree<T> {
 	private TreeNode<T> removeAt(TreeNode<T> node, T x) {
 		if (node == null) {
 			return null;
-		}
-		else {
+		} else {
 			if (x.compareTo(node.element) == 0) {
 				// found
 				removed = node.element;
-				if (node.left == null) return node.right;
-				else if (node.right == null) return node.left;
+				if (node.left == null) { return node.right; }
+				else if (node.right == null) { return node.left; }
 				else {
 					node.left = findRepAt(node.left);
 					rep.left = node.left;
 					rep.right = node.right;
 					return rep;
 				}
-			}
-			else if (x.compareTo(node.element) <= 0)
+			} else if (x.compareTo(node.element) <= 0) {
 				// search left
 				node.left = removeAt(node.left, x);
-			else
+			} else {
 				// search right
 				node.right = removeAt(node.right, x);
+			}
+
 			return node;
 		}
 	}
@@ -73,8 +71,7 @@ public class SortedBinaryTree<T extends Comparable<T>> implements Tree<T> {
 	public T removeLast() {
 		if (root.right != null) {
 			root.right = findRepAt(root.right);
-		}
-		else {
+		} else {
 			rep = root;
 			root = root.left;
 		}
