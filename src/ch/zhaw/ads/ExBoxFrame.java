@@ -42,7 +42,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	private JMenuItem connect, open, textView, graphicView;
 	private JButton enter;
 	private JTextField arguments;
-	private JComboBox<String> history;
+	private JComboBox history;
 	private JTextArea output;
 	private JScrollPane scrollPane;
 	private CommandExecutor command;
@@ -129,7 +129,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		bottomPanel.add(BorderLayout.EAST, enter);
 
 		// History box
-		history = new JComboBox<String>();
+		history = new JComboBox();
 		history.addItemListener(this);
 		bottomPanel.add(BorderLayout.SOUTH, history);
 
