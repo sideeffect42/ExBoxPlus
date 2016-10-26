@@ -84,6 +84,8 @@ public class SortedBinaryTree<T extends Comparable<T>> implements Tree<T> {
 
 	public Traversal<T> traversal() {
 		// to be done
+
+		return null;
 	}
 
 }

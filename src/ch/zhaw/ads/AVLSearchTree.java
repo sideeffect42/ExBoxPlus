@@ -153,6 +153,8 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 
 	public Traversal<T> traversal() {
 		// TODO: implement
+
+		return null;
 	}
 
 }
