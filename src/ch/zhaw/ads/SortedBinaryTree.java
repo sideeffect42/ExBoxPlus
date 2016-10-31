@@ -1,8 +1,8 @@
 package ch.zhaw.ads;
 
-import java.util.*;
+public abstract class SortedBinaryTree<T extends Comparable<T>>
+	implements Tree<T> {
 
-public abstract class SortedBinaryTree<T extends Comparable<T>> implements Tree<T> {
 	protected TreeNode<T> root;
 	private T removed;
 

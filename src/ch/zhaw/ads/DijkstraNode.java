@@ -1,6 +1,8 @@
 package ch.zhaw.ads;
 
-class DijkstraNode<E> extends Node<E> implements Comparable<DijkstraNode> {
+public abstract class DijkstraNode<E> extends Node<E>
+	implements Comparable<DijkstraNode<E>> {
+
 	boolean mark;
 	DijkstraNode<E> prev;
 	double dist;
@@ -29,5 +31,5 @@ class DijkstraNode<E> extends Node<E> implements Comparable<DijkstraNode> {
 		return prev;
 	}
 
-	public abstract int compareTo(DijkstraNode n);
+	public abstract int compareTo(DijkstraNode<E> n);
 }

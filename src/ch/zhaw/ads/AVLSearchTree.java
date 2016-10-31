@@ -7,11 +7,12 @@
 
 package ch.zhaw.ads;
 
-public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
+public abstract class AVLSearchTree<T extends Comparable<T>>
+	implements Tree<T> {
 
 	/** The tree root. */
-	private TreeNode root;
-	public TreeNode getRoot() {
+	private TreeNode<T> root;
+	public TreeNode<T> getRoot() {
 		return root;
 	}
 
@@ -31,7 +32,7 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 		if (p == null) {
 			return 0;
 		} else {
-			return 1 + size(p.left) + size(p.right);
+			return (1 + size(p.left) + size(p.right));
 		}
 	}
 
@@ -43,7 +44,7 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 	 * Return the height of node t, or -1, if null.
 	 */
 	private static int height(TreeNode t) {
-		return t == null ? 0 : t.height;
+		return (t == null ? 0 : t.height);
 	}
 
 	/**
@@ -60,11 +61,11 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 	 * @param t the node that roots the tree.
 	 * @return the new root.
 	 */
-	private TreeNode insertAt(TreeNode p, T element) {
+	private TreeNode<T> insertAt(TreeNode<T> p, T element) {
 		if (p == null) {
 			p = new TreeNode<T>(element);
 		} else {
-			int c = element.compareTo((T) p.element);
+			int c = element.compareTo((T)p.element);
 			if (c <= 0) {
 				p.left = insertAt(p.left, element);
 				if (height(p.left) - height(p.right) == 2) {
@@ -85,7 +86,7 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 				}
 			}
 		}
-		p.height = Math.max(height(p.left), height(p.right)) + 1;
+		p.height = (Math.max(height(p.left), height(p.right)) + 1);
 		return p;
 	}
 
@@ -110,8 +111,8 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 		TreeNode k1 = k2.left;
 		k2.left = k1.right;
 		k1.right = k2;
-		k2.height = Math.max(height(k2.left), height(k2.right)) + 1;
-		k1.height = Math.max(height(k1.left), k2.height) + 1;
+		k2.height = (Math.max(height(k2.left), height(k2.right)) + 1);
+		k1.height = (Math.max(height(k1.left), k2.height) + 1);
 		return k1;
 	}
 
@@ -124,8 +125,8 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
 		TreeNode k2 = k1.right;
 		k1.right = k2.left;
 		k2.left = k1;
-		k1.height = Math.max(height(k1.left), height(k1.right)) + 1;
-		k2.height = Math.max(height(k2.right), k1.height) + 1;
+		k1.height = (Math.max(height(k1.left), height(k1.right)) + 1);
+		k2.height = (Math.max(height(k2.right), k1.height) + 1);
 		return k2;
 	}
 

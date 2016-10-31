@@ -1,7 +1,5 @@
 package ch.zhaw.ads;
 
-import java.util.*;
-
 public interface Graph<N,E> {
 
 	// füge Knoten hinzu, tue nichts, falls Knoten schon existiert
