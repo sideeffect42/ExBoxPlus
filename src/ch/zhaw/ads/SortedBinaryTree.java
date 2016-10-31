@@ -2,8 +2,8 @@ package ch.zhaw.ads;
 
 import java.util.*;
 
-public class SortedBinaryTree<T extends Comparable<T>> implements Tree<T> {
-	private TreeNode<T> root;
+public abstract class SortedBinaryTree<T extends Comparable<T>> implements Tree<T> {
+	protected TreeNode<T> root;
 	private T removed;
 
 	private TreeNode<T> insertAt(TreeNode<T> node, T x) {
@@ -18,7 +18,7 @@ public class SortedBinaryTree<T extends Comparable<T>> implements Tree<T> {
 		}
 	}
 
-	public void add (T x) {
+	public void add(T x) {
 		root = insertAt(root, x);
 	}
 

@@ -1,23 +1,17 @@
 package ch.zhaw.ads;
 
-public class TreeTraversal<T extends Comparable<T>> implements Traversal<T> {
+public abstract class TreeTraversal<T extends Comparable<T>> implements Traversal<T> {
 
-	private TreeNode<T> root;
+	protected TreeNode<T> root;
 
 	public TreeTraversal(TreeNode<T> root) {
 		this.root = root;
 	}
 
-	public void inorder(Visitor<T> vis) {
-		// to be done
-	}
+	public abstract void inorder(Visitor<T> vis);
 
-	public void preorder(Visitor<T> vis) {
-		// to be done
-	}
+	public abstract void preorder(Visitor<T> vis);
 
-	public void postorder(Visitor<T> vis) {
-		// to be done
-	}
+	public abstract void postorder(Visitor<T> vis);
 
 }

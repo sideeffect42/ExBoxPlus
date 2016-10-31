@@ -1,27 +1,27 @@
 package ch.zhaw.ads;
 
-class TreeNode<T extends Comparable<T>> {
+public class TreeNode<T extends Comparable<T>> {
 	T element;
-	TreeNode left, right;
+	TreeNode<T> left, right;
 	int height;
 
 	TreeNode(T element) {
 		this.element = element;
 	}
 
-	TreeNode(T element, TreeNode left, TreeNode right) {
+	TreeNode(T element, TreeNode<T> left, TreeNode<T> right) {
 		this(element); this.left = left; this.right = right;
 	}
 
-	T getValue() {
+	public T getValue() {
 		return element;
 	}
 
-	TreeNode getLeft() {
+	public TreeNode<T> getLeft() {
 		return left;
 	}
 
-	TreeNode getRight() {
+	public TreeNode<T> getRight() {
 		return right;
 	}
 }
