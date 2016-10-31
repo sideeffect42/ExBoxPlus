@@ -29,7 +29,7 @@ JFLAGS = -cp "$(subst $(SPACE),:,$(SRC_DIRS))" \
 	-source 1.5 -target 1.5 -Xlint
 
 .java.class:
-	$(JC) $(JFLAGS) "$*.java"
+	$(JC) $(JFLAGS) '$*.java'
 
 .PHONY: all exbox clean
 
