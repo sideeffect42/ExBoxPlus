@@ -3,9 +3,9 @@ package ch.zhaw.ads;
 public abstract class DijkstraNode<E> extends Node<E>
 	implements Comparable<DijkstraNode<E>> {
 
-	boolean mark;
-	DijkstraNode<E> prev;
-	double dist;
+	private boolean mark;
+	private DijkstraNode<E> prev;
+	private double dist;
 
 	public double getDist() {
 		return dist;

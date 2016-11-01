@@ -11,7 +11,7 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 	implements Tree<T> {
 
 	/** The tree root. */
-	private TreeNode<T> root;
+	protected TreeNode<T> root;
 	public TreeNode<T> getRoot() {
 		return root;
 	}
@@ -32,7 +32,7 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 		if (p == null) {
 			return 0;
 		} else {
-			return (1 + size(p.left) + size(p.right));
+			return (1 + size(p.getLeft()) + size(p.getRight()));
 		}
 	}
 
@@ -44,7 +44,7 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 	 * Return the height of node t, or -1, if null.
 	 */
 	private static int height(TreeNode t) {
-		return (t == null ? 0 : t.height);
+		return (t == null ? 0 : t.getHeight());
 	}
 
 	/**
@@ -107,12 +107,15 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 	 * For AVL trees, this is a single rotation for case 1.
 	 * Update heights, then return new root.
 	 */
-	private static TreeNode rotateR(TreeNode k2) {
-		TreeNode k1 = k2.left;
-		k2.left = k1.right;
-		k1.right = k2;
-		k2.height = (Math.max(height(k2.left), height(k2.right)) + 1);
-		k1.height = (Math.max(height(k1.left), k2.height) + 1);
+	private static TreeNode<? extends Comparable<?>>
+		rotateR(TreeNode<? extends Comparable<?>> k2) {
+
+		TreeNode k1 = k2.getLeft();
+		k2.setLeft(k1.getRight());
+		k1.setRight(k2);
+		k2.setHeight((Math.max(height(k2.getLeft()),
+							   height(k2.getRight())) + 1));
+		k1.setHeight((Math.max(height(k1.getLeft()), k2.getHeight()) + 1));
 		return k1;
 	}
 
@@ -122,11 +125,12 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 	 * Update heights, then return new root.
 	 */
 	private static TreeNode rotateL(TreeNode k1) {
-		TreeNode k2 = k1.right;
-		k1.right = k2.left;
-		k2.left = k1;
-		k1.height = (Math.max(height(k1.left), height(k1.right)) + 1);
-		k2.height = (Math.max(height(k2.right), k1.height) + 1);
+		TreeNode<? extends Comparable<?>> k2 = k1.getRight();
+		k1.setRight(k2.getLeft());
+		k2.setLeft(k1);
+		k1.setHeight((Math.max(height(k1.getLeft()),
+							   height(k1.getRight())) + 1));
+		k2.setHeight((Math.max(height(k2.getRight()), k1.getHeight()) + 1));
 		return k2;
 	}
 
@@ -137,7 +141,7 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 	 * Update heights, then return new root.
 	 */
 	private static TreeNode rotateLR(TreeNode k3) {
-		k3.left = rotateL(k3.left);
+		k3.setLeft(rotateL(k3.getLeft()));
 		return rotateR(k3);
 	}
 
@@ -148,7 +152,7 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 	 * Update heights, then return new root.
 	 */
 	private static TreeNode rotateRL(TreeNode k1) {
-		k1.right = rotateR(k1.right);
+		k1.setRight(rotateR(k1.getRight()));
 		return rotateL(k1);
 	}
 

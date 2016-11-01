@@ -10,10 +10,10 @@ public abstract class SortedBinaryTree<T extends Comparable<T>>
 		if (node == null) {
 			return new TreeNode<T>(x);
 		} else {
-			if (x.compareTo(node.element) <= 0)
-				node.left = insertAt(node.left, x);
+			if (x.compareTo(node.getValue()) <= 0)
+				node.setLeft(insertAt(node.getLeft(), x));
 			else
-				node.right = insertAt(node.right, x);
+				node.setRight(insertAt(node.getRight(), x));
 			return node;
 		}
 	}
@@ -25,12 +25,12 @@ public abstract class SortedBinaryTree<T extends Comparable<T>>
 	// find node to replace
 	TreeNode<T> rep;
 	private TreeNode<T> findRepAt(TreeNode<T> node) {
-		if (node.right != null) {
-			node.right = findRepAt(node.right);
+		if (node.getRight() != null) {
+			node.setRight(findRepAt(node.getRight()));
 			return node;
 		} else {
-			rep = node;
-			return node.left;
+			this.rep = node;
+			return node.getLeft();
 		}
 	}
 
@@ -39,23 +39,23 @@ public abstract class SortedBinaryTree<T extends Comparable<T>>
 		if (node == null) {
 			return null;
 		} else {
-			if (x.compareTo(node.element) == 0) {
+			if (x.compareTo(node.getValue()) == 0) {
 				// found
-				removed = node.element;
-				if (node.left == null) { return node.right; }
-				else if (node.right == null) { return node.left; }
+				this.removed = node.getValue();
+				if (node.getLeft() == null) { return node.getRight(); }
+				else if (node.getRight() == null) { return node.getLeft(); }
 				else {
-					node.left = findRepAt(node.left);
-					rep.left = node.left;
-					rep.right = node.right;
-					return rep;
+					node.setLeft(findRepAt(node.getLeft()));
+					this.rep.setLeft(node.getLeft());
+					this.rep.setRight(node.getRight());
+					return this.rep;
 				}
-			} else if (x.compareTo(node.element) <= 0) {
+			} else if (x.compareTo(node.getValue()) <= 0) {
 				// search left
-				node.left = removeAt(node.left, x);
+				node.setLeft(removeAt(node.getLeft(), x));
 			} else {
 				// search right
-				node.right = removeAt(node.right, x);
+				node.setRight(removeAt(node.getRight(), x));
 			}
 
 			return node;
@@ -63,23 +63,23 @@ public abstract class SortedBinaryTree<T extends Comparable<T>>
 	}
 
 	public T remove(T x) {
-		removed = null;
-		root = removeAt(root, x);
-		return removed;
+		this.removed = null;
+		this.root = removeAt(this.root, x);
+		return this.removed;
 	}
 
 	public T removeLast() {
-		if (root.right != null) {
-			root.right = findRepAt(root.right);
+		if (this.root.getRight() != null) {
+			this.root.setRight(findRepAt(this.root.getRight()));
 		} else {
-			rep = root;
-			root = root.left;
+			this.rep = this.root;
+			this.root = root.getLeft();
 		}
-		return rep.element;
+		return this.rep.getValue();
 	}
 
 	public boolean isEmpty() {
-		return root == null;
+		return this.root == null;
 	}
 
 	public abstract Traversal<T> traversal();

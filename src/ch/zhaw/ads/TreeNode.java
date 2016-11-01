@@ -1,27 +1,43 @@
 package ch.zhaw.ads;
 
 public class TreeNode<T extends Comparable<T>> {
-	T element;
-	TreeNode<T> left, right;
-	int height;
+	private T element;
+	private TreeNode<T> left, right;
+	private int height;
 
-	TreeNode(T element) {
+	public TreeNode(T element) {
 		this.element = element;
 	}
 
-	TreeNode(T element, TreeNode<T> left, TreeNode<T> right) {
+	public TreeNode(T element, TreeNode<T> left, TreeNode<T> right) {
 		this(element); this.left = left; this.right = right;
 	}
 
 	public T getValue() {
-		return element;
+		return this.element;
 	}
 
 	public TreeNode<T> getLeft() {
-		return left;
+		return this.left;
+	}
+
+	public void setLeft(TreeNode<T> left) {
+		this.left = left;
 	}
 
 	public TreeNode<T> getRight() {
-		return right;
+		return this.right;
+	}
+
+	public void setRight(TreeNode<T> right) {
+		this.right = right;
+	}
+
+	public int getHeight() {
+		return this.height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 }
