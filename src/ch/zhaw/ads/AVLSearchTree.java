@@ -61,34 +61,35 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 	 * @param t the node that roots the tree.
 	 * @return the new root.
 	 */
-	private TreeNode<T> insertAt(TreeNode<T> p, T element) {
-		if (p == null) {
-			p = new TreeNode<T>(element);
-		} else {
-			int c = element.compareTo((T)p.element);
-			if (c <= 0) {
-				p.left = insertAt(p.left, element);
-				if (height(p.left) - height(p.right) == 2) {
-					if (height(p.left.left) > height(p.left.right)) {
-						// TODO: implement
-					} else {
-						// TODO: implement
-					}
-				}
-			} else if (c > 0) {
-				p.right = insertAt(p.right, element);
-				if (height(p.right) - height(p.left) == 2) {
-					if (height(p.right.right) > height(p.right.left)) {
-						// TODO: implement
-					} else {
-						// TODO: implement
-					}
-				}
-			}
-		}
-		p.height = (Math.max(height(p.left), height(p.right)) + 1);
-		return p;
-	}
+	protected abstract TreeNode<T> insertAt(TreeNode<T> p, T element);
+	// private TreeNode<T> insertAt(TreeNode<T> p, T element) {
+	// 	if (p == null) {
+	// 		p = new TreeNode<T>(element);
+	// 	} else {
+	// 		int c = element.compareTo((T)p.element);
+	// 		if (c <= 0) {
+	// 			p.left = insertAt(p.left, element);
+	// 			if (height(p.left) - height(p.right) == 2) {
+	// 				if (height(p.left.left) > height(p.left.right)) {
+	// 					// TODO: implement
+	// 				} else {
+	// 					// TODO: implement
+	// 				}
+	// 			}
+	// 		} else if (c > 0) {
+	// 			p.right = insertAt(p.right, element);
+	// 			if (height(p.right) - height(p.left) == 2) {
+	// 				if (height(p.right.right) > height(p.right.left)) {
+	// 					// TODO: implement
+	// 				} else {
+	// 					// TODO: implement
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// 	p.height = (Math.max(height(p.left), height(p.right)) + 1);
+	// 	return p;
+	// }
 
 	/**
 	 * Remove from the tree. Nothing is done if x is not found.
