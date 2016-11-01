@@ -28,7 +28,7 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 		return size(root);
 	}
 
-	private static int size(TreeNode p) {
+	private static <T extends Comparable<T>> int size(TreeNode<T> p) {
 		if (p == null) {
 			return 0;
 		} else {
@@ -43,7 +43,7 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 	/**
 	 * Return the height of node t, or -1, if null.
 	 */
-	private static int height(TreeNode t) {
+	private static <T extends Comparable<T>> int height(TreeNode<T> t) {
 		return (t == null ? 0 : t.getHeight());
 	}
 
@@ -108,10 +108,10 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 	 * For AVL trees, this is a single rotation for case 1.
 	 * Update heights, then return new root.
 	 */
-	private static TreeNode<? extends Comparable<?>>
-		rotateR(TreeNode<? extends Comparable<?>> k2) {
+	private static <T extends Comparable<T>>
+		TreeNode<T> rotateR(TreeNode<T> k2) {
 
-		TreeNode k1 = k2.getLeft();
+		TreeNode<T> k1 = k2.getLeft();
 		k2.setLeft(k1.getRight());
 		k1.setRight(k2);
 		k2.setHeight((Math.max(height(k2.getLeft()),
@@ -125,8 +125,10 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 	 * For AVL trees, this is a single rotation for case 4.
 	 * Update heights, then return new root.
 	 */
-	private static TreeNode rotateL(TreeNode k1) {
-		TreeNode<? extends Comparable<?>> k2 = k1.getRight();
+	private static <T extends Comparable<T>>
+		TreeNode<T> rotateL(TreeNode<T> k1) {
+
+		TreeNode<T> k2 = k1.getRight();
 		k1.setRight(k2.getLeft());
 		k2.setLeft(k1);
 		k1.setHeight((Math.max(height(k1.getLeft()),
@@ -141,7 +143,9 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 	 * For AVL trees, this is a double rotation for case 2.
 	 * Update heights, then return new root.
 	 */
-	private static TreeNode rotateLR(TreeNode k3) {
+	private static <T extends Comparable<T>>
+		TreeNode<T> rotateLR(TreeNode<T> k3) {
+
 		k3.setLeft(rotateL(k3.getLeft()));
 		return rotateR(k3);
 	}
@@ -152,7 +156,9 @@ public abstract class AVLSearchTree<T extends Comparable<T>>
 	 * For AVL trees, this is a double rotation for case 3.
 	 * Update heights, then return new root.
 	 */
-	private static TreeNode rotateRL(TreeNode k1) {
+	private static <T extends Comparable<T>>
+		TreeNode<T> rotateRL(TreeNode<T> k1) {
+
 		k1.setRight(rotateR(k1.getRight()));
 		return rotateL(k1);
 	}
