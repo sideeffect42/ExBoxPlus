@@ -10,7 +10,9 @@ public class TreeNode<T extends Comparable<T>> {
 	}
 
 	public TreeNode(T element, TreeNode<T> left, TreeNode<T> right) {
-		this(element); this.left = left; this.right = right;
+		this(element);
+		this.left = left;
+		this.right = right;
 	}
 
 	public T getValue() {
