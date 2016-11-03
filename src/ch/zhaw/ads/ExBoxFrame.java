@@ -35,6 +35,8 @@ import java.util.Set;
 import javax.swing.*;
 
 public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
+	private static final String APP_TITLE = "ExBox+";
+
 	private static final long serialVersionUID = 1L;
 	private static final double SCALE = 1;
 	private static final String FILE_ENCODING = "ISO-8859-1";
@@ -152,7 +154,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		// }
 		setFontSize((int)(11 * SCALE));
 		this.setSize(new Dimension((int)(400 * SCALE), (int)(400 * SCALE)));
-		this.setTitle("ExBox");
+		this.setTitle(APP_TITLE);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.initMenu();
 		this.initComponents();
@@ -183,7 +185,8 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	private void setServer(CommandExecutor server) {
 		if (server == null) { return; }
 		this.command = server;
-		this.setTitle(("ExBox connected to " + server.getClass().getCanonicalName()));
+		this.setTitle((APP_TITLE + " connected to "
+					   + server.getClass().getCanonicalName()));
 	}
 
 	private void connectCommand() throws Exception {
