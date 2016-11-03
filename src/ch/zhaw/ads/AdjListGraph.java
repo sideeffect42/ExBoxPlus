@@ -1,31 +1,44 @@
 package ch.zhaw.ads;
 
 import java.util.*;
+import java.lang.reflect.Type;
+import java.lang.reflect.ParameterizedType;
 
-public class AdjListGraph<N extends Node, E extends Edge>
+public class AdjListGraph<N extends Node<E>, E extends Edge<N>>
 	implements Graph<N, E> {
 
 	private final List<N> nodes = new LinkedList<N>();
-	private final Class nodeClazz;
-	private final Class edgeClazz;
 
-	public AdjListGraph(Class nodeClazz, Class edgeClazz) {
-		this.nodeClazz = nodeClazz;
-		this.edgeClazz = edgeClazz;
+	// pragma pleaselookaway start
+	private Type[] getTypeVariables() {
+		ParameterizedType superType =
+			(ParameterizedType)AdjListGraph.class.getGenericSuperclass();
+		return superType.getActualTypeArguments();
 	}
 
-	// füge Knoten hinzu, gebe alten zurück falls Knoten schon existiert
+	private N newNode() throws InstantiationException, IllegalAccessException {
+		Class<N> clazz = (Class<N>)(this.getTypeVariables()[0]);
+		return clazz.newInstance();
+	}
+
+	private E newEdge() throws InstantiationException, IllegalAccessException {
+		Class<E> clazz = (Class<E>)this.getTypeVariables()[1];
+		return clazz.newInstance();
+	}
+	// pragma pleaselookaway stop
+
+	// fÃ¼ge Knoten hinzu, gebe alten zurÃ¼ck falls Knoten schon existiert
 	public N addNode(String name) throws Throwable {
 		N node = findNode(name);
 		if (node == null) {
-			node = (N)nodeClazz.newInstance();
+			node = this.newNode();
 			node.setName(name);
 			nodes.add(node);
 		}
 		return node;
 	}
 
-	// füge gerichtete Kante hinzu
+	// fÃ¼ge gerichtete Kante hinzu
 	public void addEdge(String source, String dest, double weight)
 		throws Throwable {
 
@@ -33,7 +46,7 @@ public class AdjListGraph<N extends Node, E extends Edge>
 		N dst = addNode(dest);
 
 		try {
-			E edge = (E)edgeClazz.newInstance();
+			E edge = this.newEdge();
 			edge.setDest(dst);
 			edge.setWeight(weight);
 			src.addEdge(edge);
@@ -50,8 +63,8 @@ public class AdjListGraph<N extends Node, E extends Edge>
 		return null;
 	}
 
-	// Iterator über alle Knoten
-	public Iterable<N> getNodes() {
+	// Iterator Ã¼ber alle Knoten
+	public List<N> getNodes() {
 		return nodes;
 	}
 }
