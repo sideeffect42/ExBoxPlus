@@ -23,7 +23,7 @@ public class Edge<N> {
 	public void setWeight(double w) {
 		this.weight = w;
 	}
-	double getWeight() {
+	public double getWeight() {
 		return weight;
 	}
 }

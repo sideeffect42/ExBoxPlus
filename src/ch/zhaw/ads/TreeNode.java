@@ -1,9 +1,9 @@
 package ch.zhaw.ads;
 
 public class TreeNode<T extends Comparable<T>> {
-	private T element;
-	private TreeNode<T> left, right;
-	private int height;
+	protected T element;
+	protected TreeNode<T> left, right;
+	protected int height = -1;
 
 	public TreeNode(T element) {
 		this.element = element;
@@ -25,6 +25,8 @@ public class TreeNode<T extends Comparable<T>> {
 
 	public void setLeft(TreeNode<T> left) {
 		this.left = left;
+		this.height = -1;
+		// FIXME: also invalidate height of all parents
 	}
 
 	public TreeNode<T> getRight() {
@@ -33,6 +35,8 @@ public class TreeNode<T extends Comparable<T>> {
 
 	public void setRight(TreeNode<T> right) {
 		this.right = right;
+		this.height = -1;
+		// FIXME: also invalidate height of all parents
 	}
 
 	public int getHeight() {
