@@ -5,12 +5,14 @@
  * @author T. Yoshi
  * @version 1.0 -- Factory zur Erstellung von Server Objekten
  * @version 1.1 -- Logik zum erraten des Binary Names der Klasse eingebaut
+ * @version 1.2 -- Auslesen des `package` aus dem Class-File
  */
 
 package ch.zhaw.ads;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,9 +62,10 @@ public class ServerFactory {
 	 *         the constructor.
 	 */
 	public CommandExecutor createServer(String directory, String name)
-		throws InstantiationException {
+		throws IOException, InstantiationException {
 		final String defaultPackageName = "ch.zhaw.ads";
 		String className = name.substring(0, name.indexOf('.'));
+		String path = (directory + File.separator + name);
 
 		boolean foundClass = false;
 		CommandExecutor server = null;
@@ -77,10 +80,14 @@ public class ServerFactory {
 			System.err.printf("Loading with default package name %s failed%n",
 							  defaultPackageName);
 
-			String packageName = guessPackageName(directory, className);
+			String packageName = this.readPackageNameFromClassFile(path);
+			if (packageName == null) {
+				// Fallback to guessing
+				packageName = this.guessPackageName(directory, className);
+			}
 
 			if (packageName != null) {
-				System.err.printf("Guessed package name %s%n", packageName);
+				System.err.printf("Package name is %s%n", packageName);
 				String classBinaryName = classBinaryNameOf(packageName,
 														   className);
 
@@ -89,8 +96,9 @@ public class ServerFactory {
 					foundClass = true;
 				} catch (ClassNotFoundException e2) {}
 			} else {
-				System.err.println("Failed to guess package name. " +
-								   "Is the classfile in the classpath?");
+				System.err.println("Failed to determine package name. " +
+								   "Is either tools.jar or the classfile in " +
+								   "the classpath?");
 			}
 		}
 
@@ -143,5 +151,37 @@ public class ServerFactory {
 		}
 
 		return (foundClass ? packageName : null);
+	}
+
+	private String readPackageNameFromClassFile(String path)
+		throws IOException {
+		File f = new File(path);
+
+		String classPathSlash = null; // not classpath, but path of the class
+
+		try {
+			Class<?> ClassFile = Class.forName("com.sun.tools.classfile.ClassFile");
+			Method cfRead = ClassFile.getMethod("read", File.class);
+			Method cfGetName = ClassFile.getMethod("getName");
+			Object cf = cfRead.invoke(null, f);
+
+			if (cf == null || String.class != cfGetName.getReturnType()) {
+				return null;
+			}
+
+			classPathSlash = (String)cfGetName.invoke(cf);
+		} catch (Exception e) {
+			return null;
+		}
+
+		if (classPathSlash == null) { return null; }
+
+		File classFile = new File(classPathSlash);
+		String packageNameSlash = classFile.getParent();
+
+		String packageName = packageNameSlash.replaceAll("/", ".");
+
+		System.out.println("Read package " + packageName);
+		return packageName;
 	}
 }
