@@ -58,7 +58,7 @@ $(TARGET_BYTE): $(SRCS:.java=.class) | $$(@D)/
 
 .SECONDEXPANSION:
 $(TARGET_NATIVE): $(SRCS) | $$(@D)/
-	$(NJC) -v --main=ch.zhaw.ads.ExBox -o "$@" $^
+	$(NJC) --main=ch.zhaw.ads.ExBox -o "$@" $^
 
 clean:
 	$(FIND) $(SRC_DIRS:%:"%") -iname '*.class' -delete
