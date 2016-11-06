@@ -57,7 +57,8 @@ public class ServerFactory {
 	 * @param directory directory in which the classfile resides
 	 * @param name filename of the classfile
 	 * @returns CommandExecutor object on success, null if the class is
-	 *          not in the classpath.
+	 *          not in the classpath or not a CommandExecutor.
+	 * @throws IOException
 	 * @throws InstantiationException if an exception is thrown inside of
 	 *         the constructor.
 	 */
