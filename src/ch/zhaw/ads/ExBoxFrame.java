@@ -204,7 +204,14 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		if (directory != null && name != null) {
 			ServerFactory sf = new ServerFactory();
 			CommandExecutor server = sf.createServer(directory, name);
-			this.setServer(server);
+
+			if ((server instanceof CommandExecutor)) {
+				this.setServer(server);
+			} else {
+				// server class not found or not a CommandExecutor
+				error("Server class could not be found or is not " +
+					  "a subclass of CommandExecutor.");
+			}
 		}
 	}
 
@@ -216,8 +223,8 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 			this.setServer(server);
 		} else {
 			// invalid classBinaryName
-			System.err.println(("Could not load class with binary name '"
-								+ classBinaryName + "' as server!"));
+			System.err.printf("Could not load class '%s' as server!%n",
+							  classBinaryName);
 		}
 	}
 
