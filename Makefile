@@ -12,7 +12,15 @@ SRCS = $(shell find $(SRC_DIRS:%:"%") -iname '*.java')
 CLASSES = $(shell find $(SRC_DIRS:%:"%") -iname '*.class')
 .SUFFIXES: .java .class
 
-CP_ARG := -cp "$(subst $(SPACE),:,$(SRC_DIRS))"
+CP := $(SRC_DIRS)
+ifneq (,$(JAVA_HOME))
+ifneq (,$(wildcard $(JAVA_HOME)/lib/tools.jar))
+	CP += $(JAVA_HOME)/lib/tools.jar
+endif
+else
+$(warning JAVA_HOME is not defined)
+endif
+CP_ARG := -cp "$(subst $(SPACE),:,$(CP))"
 
 # Applications
 MKDIR_P ?= mkdir -p
