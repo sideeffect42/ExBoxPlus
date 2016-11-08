@@ -7,25 +7,23 @@ import java.lang.reflect.ParameterizedType;
 public class AdjListGraph<N extends Node<E>, E extends Edge<N>>
 	implements Graph<N, E> {
 
+	private final Class<N> nClass;
+	private final Class<E> eClass;
+
 	private final List<N> nodes = new LinkedList<N>();
 
-	// pragma pleaselookaway start
-	private Type[] getTypeVariables() {
-		ParameterizedType superType =
-			(ParameterizedType)AdjListGraph.class.getGenericSuperclass();
-		return superType.getActualTypeArguments();
+	public AdjListGraph(Class<N> nodeClass, Class<E> edgeClass) {
+		this.nClass = nodeClass;
+		this.eClass = edgeClass;
 	}
 
 	private N newNode() throws InstantiationException, IllegalAccessException {
-		Class<N> clazz = (Class<N>)(this.getTypeVariables()[0]);
-		return clazz.newInstance();
+		return this.nClass.newInstance();
 	}
 
 	private E newEdge() throws InstantiationException, IllegalAccessException {
-		Class<E> clazz = (Class<E>)this.getTypeVariables()[1];
-		return clazz.newInstance();
+		return this.eClass.newInstance();
 	}
-	// pragma pleaselookaway stop
 
 	// füge Knoten hinzu, gebe alten zurück falls Knoten schon existiert
 	public N addNode(String name) throws Throwable {
