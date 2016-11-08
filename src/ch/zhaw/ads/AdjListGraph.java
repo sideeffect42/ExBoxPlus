@@ -27,11 +27,11 @@ public class AdjListGraph<N extends Node<E>, E extends Edge<N>>
 
 	// füge Knoten hinzu, gebe alten zurück falls Knoten schon existiert
 	public N addNode(String name) throws Throwable {
-		N node = findNode(name);
+		N node = this.findNode(name);
 		if (node == null) {
 			node = this.newNode();
 			node.setName(name);
-			nodes.add(node);
+			this.nodes.add(node);
 		}
 		return node;
 	}
@@ -40,8 +40,8 @@ public class AdjListGraph<N extends Node<E>, E extends Edge<N>>
 	public void addEdge(String source, String dest, double weight)
 		throws Throwable {
 
-		N src = addNode(source);
-		N dst = addNode(dest);
+		N src = this.addNode(source);
+		N dst = this.addNode(dest);
 
 		try {
 			E edge = this.newEdge();
@@ -53,7 +53,7 @@ public class AdjListGraph<N extends Node<E>, E extends Edge<N>>
 
 	// finde den Knoten anhand seines Namens
 	public N findNode(String name) {
-		for (N node : nodes) {
+		for (N node : this.nodes) {
 			if (node.getName().equals(name)) {
 				return node;
 			}
@@ -63,6 +63,6 @@ public class AdjListGraph<N extends Node<E>, E extends Edge<N>>
 
 	// Iterator über alle Knoten
 	public List<N> getNodes() {
-		return nodes;
+		return this.nodes;
 	}
 }
