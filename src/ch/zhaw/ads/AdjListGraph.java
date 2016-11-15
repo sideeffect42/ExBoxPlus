@@ -17,11 +17,11 @@ public class AdjListGraph<N extends Node<E>, E extends Edge<N>>
 		this.eClass = edgeClass;
 	}
 
-	private N newNode() throws InstantiationException, IllegalAccessException {
+	private N newNode() throws IllegalAccessException, InstantiationException {
 		return this.nClass.newInstance();
 	}
 
-	private E newEdge() throws InstantiationException, IllegalAccessException {
+	private E newEdge() throws IllegalAccessException, InstantiationException {
 		return this.eClass.newInstance();
 	}
 
