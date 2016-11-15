@@ -28,7 +28,7 @@ public class GraphicPanel extends JPanel {
 	}
 
 	private void drawFigure(Graphics g) {
-		if (figure != null) {
+		if (figure != null && g != null) {
 			int w = getWidth();
 			int h = getHeight();
 			g.setColor(Color.black);
@@ -72,6 +72,7 @@ public class GraphicPanel extends JPanel {
 	}
 
 	private void clear(Graphics g) {
+		if (g == null) { return; }
 		int w = getWidth();
 		int h = getHeight();
 		g.setColor(new Color(240, 240, 240));
