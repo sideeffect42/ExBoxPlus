@@ -87,7 +87,6 @@ public class ExBox {
 		}
 
 		ExBoxFrame f = new ExBoxFrame();
-		f.setVisible(true);
 
 		// Set mode
 		if (parameters.containsKey("mode")) {
@@ -119,5 +118,7 @@ public class ExBox {
 			System.out.println("Loading commands file '" + commandsFilePath + "'...");
 			f.processCommadsFile(commandsFilePath);
 		}
+
+		f.setVisible(true);
 	}
 }
