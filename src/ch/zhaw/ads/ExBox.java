@@ -22,59 +22,66 @@ public class ExBox {
 		HashMap<String, String> parameters = new HashMap<String, String>();
 
 		{
-			int i = 0, argc = args.length;
+			int i, argc = args.length;
 			String key = "";
-			for (; i < argc; i++) {
-				if (key == null || key.length() < 1) {
-					// new argument
-					if (("-" + HELP_ARG).equals(args[i])) {
-						// Print help
-						System.out.println("HELP!!");
-
-						// If help is processed, stop application
-						System.exit(0);
-					} else if (("-" + INIT_CLASS_ARG).equals(args[i])) {
-						key = args[i]; // this is an argument option
-						continue;
-					} else if (("-" + INIT_FILE_LOAD_ARG).equals(args[i])) {
-						key = args[i]; // this is an argument option
-						continue;
-					} else if (("-" + INIT_COMMANDS_LOAD_ARG).equals(args[i])) {
-						key = args[i]; // this is an argument option
-						continue;
-					} else if (("-" + INIT_TEXT_MODE).equals(args[i])
-							|| ("-" + INIT_GRAPHICS_MODE).equals(args[i])) {
-						if (!parameters.containsKey("mode")) {
-							if (("-" + INIT_TEXT_MODE).equals(args[i])) {
-								parameters.put("mode", "text");
-							} else if (("-" + INIT_GRAPHICS_MODE).equals(args[i])) {
-								parameters.put("mode", "graphics");
-							}
-						} else {
-							System.err.println(String.format(
-								"Options '-{}' and '-{}' are mutally exclusive.",
-								INIT_TEXT_MODE, INIT_GRAPHICS_MODE
-							));
-						}
-					} else {
-						System.err.println(("Unknown option '" + args[i] + "'."));
-					}
-				} else {
+			for (i = 0; i < argc; i++) {
+				if (key != null && key.length() > 0) {
 					// this is an option argument
 					if (args[i].startsWith("-")) {
 						// this option has no argument
-						System.err.println(("Option '" + key + "' requires an argument, but none was given!"));
-						break;
-					}
+						System.err.printf("Option '%s' requires an argument, "
+										  + "but none was given!%n", key);
+						key = "";
+					} else {
+						if (("-" + INIT_CLASS_ARG).equals(key)) {
+							parameters.put(INIT_CLASS_ARG, args[i]);
+						} else if (("-" + INIT_FILE_LOAD_ARG).equals(key)) {
+							parameters.put(INIT_FILE_LOAD_ARG, args[i]);
+						} else if (("-" + INIT_COMMANDS_LOAD_ARG).equals(key)) {
+							parameters.put(INIT_COMMANDS_LOAD_ARG, args[i]);
+						}
 
-					if (("-" + INIT_CLASS_ARG).equals(key)) {
-						parameters.put(INIT_CLASS_ARG, args[i]);
-					} else if (("-" + INIT_FILE_LOAD_ARG).equals(key)) {
-						parameters.put(INIT_FILE_LOAD_ARG, args[i]);
-					} else if (("-" + INIT_COMMANDS_LOAD_ARG).equals(key)) {
-						parameters.put(INIT_COMMANDS_LOAD_ARG, args[i]);
+						key = "";
+						continue;
 					}
 				}
+
+				// new argument
+				if (("-" + HELP_ARG).equals(args[i])) {
+					// Print help
+					System.out.println("HELP!!");
+
+					// If help is processed, stop application
+					System.exit(0);
+				} else if (("-" + INIT_CLASS_ARG).equals(args[i])) {
+					key = args[i]; // this is an argument option
+					continue;
+				} else if (("-" + INIT_FILE_LOAD_ARG).equals(args[i])) {
+					key = args[i]; // this is an argument option
+					continue;
+				} else if (("-" + INIT_COMMANDS_LOAD_ARG).equals(args[i])) {
+					key = args[i]; // this is an argument option
+					continue;
+				} else if (("-" + INIT_CONSOLE_MODE).equals(args[i])
+						   || ("-" + INIT_TEXT_MODE).equals(args[i])
+						   || ("-" + INIT_GRAPHICS_MODE).equals(args[i])) {
+					if (!parameters.containsKey("mode")) {
+						if (("-" + INIT_TEXT_MODE).equals(args[i])) {
+							parameters.put("mode", "text");
+						} else if (("-" + INIT_GRAPHICS_MODE).equals(args[i])) {
+							parameters.put("mode", "graphics");
+						}
+					} else {
+						System.err.printf(
+							"Options '-%s', '-%s' and '-%s' are mutally exclusive.%n",
+							 INIT_CONSOLE_MODE, INIT_TEXT_MODE,
+							 INIT_GRAPHICS_MODE
+							);
+					}
+				} else {
+					System.err.printf("Unknown option '%s'.%n", args[i]);
+				}
+
 				key = "";
 			}
 		}
