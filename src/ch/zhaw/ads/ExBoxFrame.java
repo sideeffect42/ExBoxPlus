@@ -39,7 +39,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final double SCALE = 1;
-	private static final String FILE_ENCODING = "ISO-8859-1";
+	private static final String FILE_ENCODING = "UTF-8";
 	private String pathtocompiled;
 	private JMenuItem connect, open, textView, graphicView;
 	private JButton enter;
