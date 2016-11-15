@@ -2,7 +2,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class MyHashtable<K, V> implements Map<K, V> {
+public abstract class MyAbstractHashtable<K, V> implements Map<K, V> {
 	@SuppressWarnings("unchecked")
 	private K[] keys = (K[])new Object[10];
 	@SuppressWarnings("unchecked")
