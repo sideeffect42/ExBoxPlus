@@ -82,6 +82,16 @@ public class ExBox {
 		ExBoxFrame f = new ExBoxFrame();
 		f.setVisible(true);
 
+		// Set mode
+		if (parameters.containsKey("mode")) {
+			String mode = parameters.get("mode");
+			if ("text".equals(mode)) {
+				f.setTextView();
+			} else if ("graphics".equals(mode)) {
+				f.setGraphicView();
+			}
+		}
+
 		// Load specified server
 		if (parameters.containsKey(INIT_CLASS_ARG)) {
 			String classBinaryName = parameters.get(INIT_CLASS_ARG);
@@ -101,16 +111,6 @@ public class ExBox {
 			String commandsFilePath = parameters.get(INIT_COMMANDS_LOAD_ARG);
 			System.out.println("Loading commands file '" + commandsFilePath + "'...");
 			f.processCommadsFile(commandsFilePath);
-		}
-
-		// Set mode
-		if (parameters.containsKey("mode")) {
-			String mode = parameters.get("mode");
-			if ("text".equals(mode)) {
-				f.setTextView();
-			} else if ("graphics".equals(mode)) {
-				f.setGraphicView();
-			}
 		}
 	}
 }
