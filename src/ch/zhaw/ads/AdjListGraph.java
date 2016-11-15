@@ -4,7 +4,7 @@ import java.util.*;
 import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
 
-public class AdjListGraph<N extends Node<E>, E extends Edge<N>>
+public class AdjListGraph<N extends Node, E extends Edge>
 	implements Graph<N, E> {
 
 	private final Class<N> nClass;
