@@ -58,7 +58,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 			if (key != null && key.toString().toLowerCase().contains("font")) {
 				Font font = UIManager.getDefaults().getFont(key);
 				if (font != null) {
-					font = font.deriveFont((float) size);
+					font = font.deriveFont((float)size);
 					UIManager.put(key, font);
 				}
 			}
@@ -71,7 +71,8 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		JMenuItem menuFileExit = new JMenuItem();
 		menuFile.setText("File");
 		menuFileExit.setText("Exit");
-		menuFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK));
+		menuFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
+														   Event.CTRL_MASK));
 
 		// Add action listener.for the menu button
 		menuFileExit.addActionListener(new ActionListener() {
@@ -87,11 +88,13 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 
 		menuBar.add(menuView);
 		textView = new JMenuItem("Text");
-		textView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Event.CTRL_MASK));
+		textView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,
+													   Event.CTRL_MASK));
 		textView.addActionListener(this);
 		menuView.add(textView);
 		graphicView = new JMenuItem("Graphic");
-		graphicView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Event.CTRL_MASK));
+		graphicView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
+														  Event.CTRL_MASK));
 		graphicView.addActionListener(this);
 		menuView.add(graphicView);
 
@@ -99,12 +102,14 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		menuBar.add(menuServer);
 		connect = new JMenuItem("Connect...");
 		connect.addActionListener(this);
-		connect.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Event.CTRL_MASK));
+		connect.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K,
+													  Event.CTRL_MASK));
 		menuServer.add(connect);
 
 		open = new JMenuItem("Open...");
 		open.addActionListener(this);
-		open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK));
+		open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
+												   Event.CTRL_MASK));
 		menuFile.insert(open, 0);
 		this.setJMenuBar(menuBar);
 	}
@@ -144,8 +149,8 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	public ExBoxFrame() throws Exception {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		// pathtocompiled = getClass().getProtectionDomain().getCodeSource().getLocation().getPath().replace("%20", " ").replace("/", File.separator);
 		// pathtocompiled += "ch\\zhaw\\ads";
@@ -161,7 +166,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	}
 
 	private void error(String s) {
-		output.append("\nERROR:" + s + "\n");
+		output.append(("\nERROR: " + s + "\n"));
 	}
 
 	private void interpret(String args) throws Exception {
