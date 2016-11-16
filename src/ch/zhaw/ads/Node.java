@@ -1,6 +1,7 @@
 package ch.zhaw.ads;
 
-import java.util.*;
+import java.util.List;
+import java.util.LinkedList;
 
 public class Node<E> {
 	protected String name; // Name
