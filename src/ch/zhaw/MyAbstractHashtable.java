@@ -1,14 +1,16 @@
+package ch.zhaw;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
 public abstract class MyAbstractHashtable<K, V> implements Map<K, V> {
 	@SuppressWarnings("unchecked")
-	private K[] keys = (K[])new Object[10];
+	protected K[] keys = (K[])new Object[10];
 	@SuppressWarnings("unchecked")
-	private V[] values = (V[])new Object[10];
+	protected V[] values = (V[])new Object[10];
 
-	private int hash(Object k) {
+	protected int hash(Object k) {
 		int h = Math.abs(k.hashCode());
 		return (h % this.keys.length);
 	}
@@ -50,7 +52,7 @@ public abstract class MyAbstractHashtable<K, V> implements Map<K, V> {
 
 	// Removes the mapping for this key from this map
 	// if present (optional operation).
-	public abstract V removeByKey(K key);
+	public abstract V remove(Object key);
 
 	// Returns the number of key-value mappings in this map.
 	public abstract int size();
