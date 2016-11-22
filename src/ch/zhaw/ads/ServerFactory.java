@@ -25,8 +25,28 @@ public class ServerFactory {
 	private URLClassLoader classLoader;
 
 	public ServerFactory() {
+		this.classLoader = this.freshClassLoader(null);
+	}
+
+	private URLClassLoader freshClassLoader(URLClassLoader oldLoader) {
 		ClassLoader parentLoader = ClassLoader.getSystemClassLoader();
-		this.classLoader = new URLClassLoader((new URL[] {}), parentLoader);
+		URL[] urls = null;
+		if (oldLoader != null) {
+			urls = oldLoader.getURLs();
+		} else {
+			urls = new URL[] {};
+		}
+
+		return new URLClassLoader(urls, parentLoader);
+	}
+
+	/**
+	 * Refresh this Factory's classLoader.
+	 * Use this to reload a CommandExecutor, by executing this method followed
+	 * by a fresh createServer.
+	 */
+	public void refresh() {
+		this.classLoader = this.freshClassLoader(this.classLoader);
 	}
 
 	/**

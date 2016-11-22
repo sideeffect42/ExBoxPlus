@@ -43,7 +43,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 
 	private ServerFactory serverFactory;
 	private String pathtocompiled;
-	private JMenuItem connect, open, textView, graphicView;
+	private JMenuItem connect, reload, open, textView, graphicView;
 	private JButton enter;
 	private JTextField arguments;
 	private JComboBox history;
@@ -107,6 +107,11 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		connect.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K,
 													  Event.CTRL_MASK));
 		menuServer.add(connect);
+		reload = new JMenuItem("Reload");
+		reload.addActionListener(this);
+		reload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,
+													 Event.CTRL_MASK));
+		menuServer.add(reload);
 
 		open = new JMenuItem("Open...");
 		open.addActionListener(this);
@@ -236,6 +241,17 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		}
 	}
 
+	private void reloadCommand() throws Exception {
+		if (this.command == null) { return; }
+
+		String currentCommand = this.command.getClass().getName();
+
+		System.out.printf("Reloading server %s...%n", currentCommand);
+
+		this.serverFactory.refresh();
+		this.connectCommand(currentCommand);
+	}
+
 	private void openFile() throws Exception {
 		FileDialog fd = new FileDialog(this, "Open");
 		fd.setVisible(true);
@@ -328,6 +344,8 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 				this.interpret(arguments.getText());
 			} else if (e.getSource() == connect) {
 				this.connectCommand();
+			} else if (e.getSource() == reload) {
+				this.reloadCommand();
 			} else if (e.getSource() == open) {
 				this.openFile();
 			} else if (e.getSource() == textView) {
