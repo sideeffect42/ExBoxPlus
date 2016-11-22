@@ -123,7 +123,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		add(BorderLayout.CENTER, scrollPane);
 
 		// Create bottom panel
-		Panel bottomPanel = new Panel(new BorderLayout());
+		JPanel bottomPanel = new JPanel(new BorderLayout());
 
 		// Input field
 		arguments = new JTextField();
