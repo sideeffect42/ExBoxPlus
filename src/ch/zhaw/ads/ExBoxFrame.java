@@ -40,6 +40,8 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	private static final long serialVersionUID = 1L;
 	private static final double SCALE = 1;
 	private static final String FILE_ENCODING = "UTF-8";
+
+	private ServerFactory serverFactory;
 	private String pathtocompiled;
 	private JMenuItem connect, open, textView, graphicView;
 	private JButton enter;
@@ -147,6 +149,8 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	 * The constructor
 	 */
 	public ExBoxFrame() throws Exception {
+		this.serverFactory = new ServerFactory();
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
@@ -208,8 +212,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		fd.setVisible(true);
 		String directory = fd.getDirectory(), name = fd.getFile();
 		if (directory != null && name != null) {
-			ServerFactory sf = new ServerFactory();
-			CommandExecutor server = sf.createServer(directory, name);
+			CommandExecutor server = this.serverFactory.createServer(directory, name);
 
 			if ((server instanceof CommandExecutor)) {
 				this.setServer(server);
@@ -222,8 +225,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 	}
 
 	public void connectCommand(String classBinaryName) throws Exception {
-		ServerFactory sf = new ServerFactory();
-		CommandExecutor server = sf.createServer(classBinaryName);
+		CommandExecutor server = this.serverFactory.createServer(classBinaryName);
 
 		if (server != null) {
 			this.setServer(server);
