@@ -182,6 +182,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 			if (graphicOn) {
 				graphic.setFigure(res);
 			} else {
+				if (!res.endsWith("\n")) { res += "\n"; }
 				output.append(res);
 			}
 		}
