@@ -13,11 +13,20 @@ package ch.zhaw.ads;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ServerFactory {
+
+	private ClassLoader classLoader;
+
+	public ServerFactory() {
+		this.classLoader = Thread.currentThread().getContextClassLoader();
+	}
 
 	/**
 	 * Create CommandExecutor object from binary class name.
@@ -30,7 +39,7 @@ public class ServerFactory {
 	 */
 	public CommandExecutor createServer(String classBinaryName)
 		throws ClassNotFoundException, InstantiationException {
-		Class<?> clazz = Class.forName(classBinaryName);
+		Class<?> clazz = Class.forName(classBinaryName, true, this.classLoader);
 		if (clazz != null) {
 			Object inst;
 			try {
@@ -95,7 +104,20 @@ public class ServerFactory {
 				try {
 					server = this.createServer(classBinaryName);
 					foundClass = true;
-				} catch (ClassNotFoundException e2) {}
+				} catch (ClassNotFoundException e2) {
+					System.err.printf("Could not find class '%s' in classpath%n",
+									  classBinaryName);
+
+					String classDir = this.classPathDirForPackageDir(
+											directory, packageName);
+
+					this.addToClassPath(classDir);
+
+					try {
+						server = this.createServer(classBinaryName);
+						foundClass = true;
+					} catch (ClassNotFoundException e3) {}
+				}
 			} else {
 				System.err.println("Failed to determine package name. " +
 								   "Is either tools.jar or the classfile in " +
@@ -152,6 +174,63 @@ public class ServerFactory {
 		}
 
 		return (foundClass ? packageName : null);
+	}
+
+	private String classPathDirForPackageDir(String directory,
+											 String packageName) {
+		if (directory == null || packageName == null
+			|| directory.length() < 1 || packageName.length() < 1) {
+			return null;
+		}
+
+		ArrayList<String> directoryComponents = new ArrayList<String>(
+								Arrays.asList(directory.split(File.separator)));
+		ArrayList<String> packageComponents = new ArrayList<String>(
+								Arrays.asList(packageName.split("\\.")));
+
+		if (packageComponents.size() > directoryComponents.size()) {
+			// how can this be possible?
+			return null;
+		}
+
+		int offset = (directoryComponents.size() - packageComponents.size());
+		for (int i = (packageComponents.size() - 1); i >= 0; i--) {
+			if (!directoryComponents.get((offset + i))
+				.equals(packageComponents.get(i))) {
+				return null;
+			}
+
+			directoryComponents.remove((offset + i));
+			packageComponents.remove(i);
+		}
+
+		// ugly hack because Java cannot join Collections with Strings
+		return directoryComponents.toString()
+			.replaceAll(", ", File.separator)
+			.replaceAll("(^\\[)|(\\]$)", "");
+	}
+
+	private void addToClassPath(String directory) {
+		int numCurrentURLs = 0;
+		URL[] urls;
+		if ((this.classLoader instanceof URLClassLoader)) {
+			URL[] loaderURLs = ((URLClassLoader)this.classLoader).getURLs();
+			numCurrentURLs = loaderURLs.length;
+			urls = new URL[(numCurrentURLs + 1)];
+
+			System.arraycopy((Object)loaderURLs, 0, (Object)urls, 0, loaderURLs.length);
+		} else {
+			urls = new URL[1];
+		}
+
+		try {
+			String urlString = ("file://" + directory + "/");
+			URL url = new URL(urlString);
+
+			urls[(urls.length - 1)] = url;
+		} catch (MalformedURLException mue) {}
+
+		this.classLoader = new URLClassLoader(urls, this.classLoader);
 	}
 
 	private String readPackageNameFromClassFile(String path)
