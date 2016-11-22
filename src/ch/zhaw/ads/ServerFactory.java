@@ -22,10 +22,11 @@ import java.util.List;
 
 public class ServerFactory {
 
-	private ClassLoader classLoader;
+	private URLClassLoader classLoader;
 
 	public ServerFactory() {
-		this.classLoader = Thread.currentThread().getContextClassLoader();
+		ClassLoader parentLoader = ClassLoader.getSystemClassLoader();
+		this.classLoader = new URLClassLoader((new URL[] {}), parentLoader);
 	}
 
 	/**
@@ -214,7 +215,7 @@ public class ServerFactory {
 		int numCurrentURLs = 0;
 		URL[] urls;
 		if ((this.classLoader instanceof URLClassLoader)) {
-			URL[] loaderURLs = ((URLClassLoader)this.classLoader).getURLs();
+			URL[] loaderURLs = this.classLoader.getURLs();
 			numCurrentURLs = loaderURLs.length;
 			urls = new URL[(numCurrentURLs + 1)];
 
