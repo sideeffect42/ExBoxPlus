@@ -4,13 +4,16 @@ SPACE +=
 
 BIN_DIR := ./bin
 SRC_DIRS := ./src
+SRC_DIRS_ALL := $(SRC_DIRS)
 ifneq (,$(SRCDIR))
-$(info Including sources in '$(SRCDIR)')
-SRC_DIRS += $(SRCDIR)
+SRC_DIRS_ALL += '$(SRCDIR)'
 endif
 
-SRCS = $(shell find $(SRC_DIRS) -iname '*.java')
-CLASSES = $(shell find $(SRC_DIRS) -iname '*.class')
+SRCS = $(shell find -L $(SRC_DIRS) -iname '*.java')
+SRCS_ALL = $(shell find -L $(SRC_DIRS_ALL) -iname '*.java')
+CLASSES = $(shell find -L $(SRC_DIRS) -iname '*.class')
+CLASSES_ALL = $(shell find -L $(SRC_DIRS_ALL) -iname '*.class')
+
 .SUFFIXES: .java .class
 
 CP := $(SRC_DIRS)
@@ -32,7 +35,7 @@ FIND ?= find
 
 # Paths
 TARGET_NATIVE := $(BIN_DIR)/ExBox
-TARGET_BYTE := $(BIN_DIR)/ExBox.jar
+TARGET_JAR := $(BIN_DIR)/ExBox.jar
 MANIFEST_FILE := META-INF/MANIFEST.MF
 
 # Compiler flags
@@ -41,21 +44,24 @@ JFLAGS = $(CP_ARG) -source 1.5 -target 1.5 -Xlint
 .java.class:
 	$(JC) $(JFLAGS) '$*.java'
 
-.PHONY: all run clean
+.PHONY: all jar native run clean
 
 %/:
 	@echo "Create directory $*"
 	$(MKDIR_P) "$*"
 
 # Default is normal Java-bytecode compilation
-all: $(TARGET_BYTE) ;
+all: $(SRCS_ALL:.java=.class) ;
 
 # Native compilation
 native: $(TARGET_NATIVE) ;
 
+# Bytecode compilation, but pack classfiles in jar
+jar: $(TARGET_JAR) ;
+
 .SECONDEXPANSION:
-$(TARGET_BYTE): $(SRCS:.java=.class) | $$(@D)/
-	$(JAR) -cfm "$(TARGET_BYTE)" "$(MANIFEST_FILE)" $(CLASSES)
+$(TARGET_JAR): $(SRCS:.java=.class) | $$(@D)/
+	$(JAR) -cfm "$@" "$(MANIFEST_FILE)" $(CLASSES:%='%')
 
 .SECONDEXPANSION:
 $(TARGET_NATIVE): $(SRCS) | $$(@D)/
