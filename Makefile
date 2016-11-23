@@ -40,7 +40,7 @@ JFLAGS = $(CP_ARG) -source 1.5 -target 1.5 -Xlint
 .java.class:
 	$(JC) $(JFLAGS) '$*.java'
 
-.PHONY: all exbox clean
+.PHONY: all clean
 
 %/:
 	@echo "Create directory $*"
