@@ -15,6 +15,7 @@ public class ExBox {
 	private static final String INIT_CLASS_ARG = "class";
 	private static final String INIT_FILE_LOAD_ARG = "file";
 	private static final String INIT_COMMANDS_LOAD_ARG = "in";
+	private static final String INIT_EXEC_ARG = "exec";
 	private static final String INIT_TEXT_MODE = "xt";
 	private static final String INIT_GRAPHICS_MODE = "xg";
 
@@ -39,6 +40,8 @@ public class ExBox {
 							parameters.put(INIT_FILE_LOAD_ARG, args[i]);
 						} else if (("-" + INIT_COMMANDS_LOAD_ARG).equals(key)) {
 							parameters.put(INIT_COMMANDS_LOAD_ARG, args[i]);
+						} else if (("-" + INIT_EXEC_ARG).equals(key)) {
+							parameters.put(INIT_EXEC_ARG, args[i]);
 						}
 
 						key = "";
@@ -53,13 +56,10 @@ public class ExBox {
 
 					// If help is processed, stop application
 					System.exit(0);
-				} else if (("-" + INIT_CLASS_ARG).equals(args[i])) {
-					key = args[i]; // this is an argument option
-					continue;
-				} else if (("-" + INIT_FILE_LOAD_ARG).equals(args[i])) {
-					key = args[i]; // this is an argument option
-					continue;
-				} else if (("-" + INIT_COMMANDS_LOAD_ARG).equals(args[i])) {
+				} else if (("-" + INIT_CLASS_ARG).equals(args[i])
+						   || ("-" + INIT_FILE_LOAD_ARG).equals(args[i])
+						   || ("-" + INIT_COMMANDS_LOAD_ARG).equals(args[i])
+						   || ("-" + INIT_EXEC_ARG).equals(args[i])) {
 					key = args[i]; // this is an argument option
 					continue;
 				} else if (("-" + INIT_CONSOLE_MODE).equals(args[i])
@@ -117,6 +117,13 @@ public class ExBox {
 			String commandsFilePath = parameters.get(INIT_COMMANDS_LOAD_ARG);
 			System.out.println("Loading commands file '" + commandsFilePath + "'...");
 			f.processCommadsFile(commandsFilePath);
+		}
+
+		// Execute command
+		if (parameters.containsKey(INIT_EXEC_ARG)) {
+			String commandString = parameters.get(INIT_EXEC_ARG);
+			System.out.println("Processing command '" + commandString + "'");
+			f.interpret(commandString);
 		}
 
 		f.setVisible(true);

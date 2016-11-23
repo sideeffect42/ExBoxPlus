@@ -178,7 +178,7 @@ public class ExBoxFrame extends JFrame implements ActionListener, ItemListener {
 		output.append(("\nERROR: " + s + "\n"));
 	}
 
-	private void interpret(String args) throws Exception {
+	public void interpret(String args) throws Exception {
 		if (command == null) {
 			error("no Server connected");
 		} else {
