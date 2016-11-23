@@ -40,7 +40,7 @@ JFLAGS = $(CP_ARG) -source 1.5 -target 1.5 -Xlint
 .java.class:
 	$(JC) $(JFLAGS) '$*.java'
 
-.PHONY: all clean
+.PHONY: all run clean
 
 %/:
 	@echo "Create directory $*"
@@ -59,6 +59,16 @@ $(TARGET_BYTE): $(SRCS:.java=.class) | $$(@D)/
 .SECONDEXPANSION:
 $(TARGET_NATIVE): $(SRCS) | $$(@D)/
 	$(NJC) --main=ch.zhaw.ads.ExBox -o "$@" $^
+
+run:
+ifneq (,$(wildcard $(TARGET_NATIVE)))
+	"$(TARGET_NATIVE)" $(args)
+else ifneq (,$(wildcard $(TARGET_BYTE)))
+	java $(CP_ARG) -jar "$(TARGET_BYTE)" $(args)
+else
+	java $(CP_ARG) 'ch.zhaw.ads.ExBox' $(args)
+endif
+
 
 clean:
 	$(FIND) $(SRC_DIRS:%:"%") -iname '*.class' -delete
