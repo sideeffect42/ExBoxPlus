@@ -1,3 +1,11 @@
+# Applications
+MKDIR_P ?= mkdir -p
+JAVA ?= java
+JC ?= javac
+JAR ?= jar
+NJC ?= gcj
+FIND ?= find
+
 # Define stupid escape variables
 SPACE :=
 SPACE +=
@@ -9,10 +17,10 @@ ifneq (,$(SRCDIR))
 SRC_DIRS_ALL += '$(SRCDIR)'
 endif
 
-SRCS = $(shell find -L $(SRC_DIRS) -iname '*.java')
-SRCS_ALL = $(shell find -L $(SRC_DIRS_ALL) -iname '*.java')
-CLASSES = $(shell find -L $(SRC_DIRS) -iname '*.class')
-CLASSES_ALL = $(shell find -L $(SRC_DIRS_ALL) -iname '*.class')
+SRCS = $(shell $(FIND) -L $(SRC_DIRS) -iname '*.java')
+SRCS_ALL = $(shell $(FIND) -L $(SRC_DIRS_ALL) -iname '*.java')
+CLASSES = $(shell $(FIND) -L $(SRC_DIRS) -iname '*.class')
+CLASSES_ALL = $(shell $(FIND) -L $(SRC_DIRS_ALL) -iname '*.class')
 
 .SUFFIXES: .java .class
 
@@ -26,17 +34,10 @@ $(warning JAVA_HOME is not defined)
 endif
 CP_ARG := -cp "$(subst $(SPACE),:,$(CP))"
 
-# Applications
-MKDIR_P ?= mkdir -p
-JC ?= javac
-JAR ?= jar
-NJC ?= gcj
-FIND ?= find
-
 # Paths
 TARGET_NATIVE := $(BIN_DIR)/ExBox
 TARGET_JAR := $(BIN_DIR)/ExBox.jar
-MANIFEST_FILE := META-INF/MANIFEST.MF
+MANIFEST_FILE := ./META-INF/MANIFEST.MF
 
 # Compiler flags
 JFLAGS = $(CP_ARG) -source 1.5 -target 1.5 -Xlint
@@ -71,9 +72,9 @@ run:
 ifneq (,$(wildcard $(TARGET_NATIVE)))
 	"$(TARGET_NATIVE)" $(args)
 else ifneq (,$(wildcard $(TARGET_BYTE)))
-	java $(CP_ARG) -jar "$(TARGET_BYTE)" $(args)
+	$(JAVA) $(CP_ARG) -jar "$(TARGET_BYTE)" $(args)
 else
-	java $(CP_ARG) 'ch.zhaw.ads.ExBox' $(args)
+	$(JAVA) $(CP_ARG) 'ch.zhaw.ads.ExBox' $(args)
 endif
 
 
