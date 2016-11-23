@@ -8,8 +8,8 @@ ifneq (,$(SRCDIR))
 SRC_DIRS += $(SRCDIR)
 endif
 
-SRCS = $(shell find $(SRC_DIRS:%:"%") -iname '*.java')
-CLASSES = $(shell find $(SRC_DIRS:%:"%") -iname '*.class')
+SRCS = $(shell find $(SRC_DIRS) -iname '*.java')
+CLASSES = $(shell find $(SRC_DIRS) -iname '*.class')
 .SUFFIXES: .java .class
 
 CP := $(SRC_DIRS)
