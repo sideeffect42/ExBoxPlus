@@ -18,6 +18,7 @@ public class ExBox {
 	private static final String INIT_EXEC_ARG = "exec";
 	private static final String INIT_TEXT_MODE = "xt";
 	private static final String INIT_GRAPHICS_MODE = "xg";
+	private static final String INIT_CONSOLE_MODE = "nox";
 
 	public static void main(String[] args) throws Exception {
 		HashMap<String, String> parameters = new HashMap<String, String>();
@@ -70,6 +71,8 @@ public class ExBox {
 							parameters.put("mode", "text");
 						} else if (("-" + INIT_GRAPHICS_MODE).equals(args[i])) {
 							parameters.put("mode", "graphics");
+						} else if (("-" + INIT_CONSOLE_MODE).equals(args[i])) {
+							parameters.put("mode", "console");
 						}
 					} else {
 						System.err.printf(
@@ -95,6 +98,9 @@ public class ExBox {
 				f.setTextView();
 			} else if ("graphics".equals(mode)) {
 				f.setGraphicView();
+			} else if ("console".equals(mode)) {
+				System.err.println("Console mode not implemented yet!");
+				System.exit(1);
 			}
 		}
 
