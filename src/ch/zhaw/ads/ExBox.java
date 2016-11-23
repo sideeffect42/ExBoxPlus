@@ -53,7 +53,18 @@ public class ExBox {
 				// new argument
 				if (("-" + HELP_ARG).equals(args[i])) {
 					// Print help
-					System.out.println("HELP!!");
+					System.out.println("Usage: ExBox [options]");
+					System.out.println();
+
+					System.out.println("\t-class\tstart with server class");
+					System.out.println("\t-file\tstart and open provided file in provided server ");
+					System.out.println("\t-in\tstart and interpret provided file line for line in provided server");
+					System.out.println("\t-exec\texecute this command in provided server after starting");
+					System.out.println("\t-xt\tstart in text mode");
+					System.out.println("\t-xg\tstart in graphics mode");
+					System.out.println("\t-nox\trun in console mode");
+					System.out.println("\t-help\tprint this help section");
+					System.out.println();
 
 					// If help is processed, stop application
 					System.exit(0);
