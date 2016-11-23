@@ -5,6 +5,7 @@ SPACE +=
 BIN_DIR := ./bin
 SRC_DIRS := ./src
 ifneq (,$(SRCDIR))
+$(info Including sources in '$(SRCDIR)')
 SRC_DIRS += $(SRCDIR)
 endif
 
