@@ -68,15 +68,8 @@ $(TARGET_JAR): $(SRCS:.java=.class) | $$(@D)/
 $(TARGET_NATIVE): $(SRCS) | $$(@D)/
 	$(NJC) --main=ch.zhaw.ads.ExBox -o "$@" $^
 
-run:
-ifneq (,$(wildcard $(TARGET_NATIVE)))
-	"$(TARGET_NATIVE)" $(args)
-else ifneq (,$(wildcard $(TARGET_BYTE)))
-	$(JAVA) $(CP_ARG) -jar "$(TARGET_BYTE)" $(args)
-else
+run: all
 	$(JAVA) $(CP_ARG) 'ch.zhaw.ads.ExBox' $(args)
-endif
-
 
 clean:
 	$(FIND) $(SRC_DIRS:%:"%") -iname '*.class' -delete
