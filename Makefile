@@ -14,7 +14,7 @@ BIN_DIR := ./bin
 SRC_DIRS := ./src
 SRC_DIRS_ALL := $(SRC_DIRS)
 ifneq (,$(SRCDIR))
-SRC_DIRS_ALL += '$(SRCDIR)'
+SRC_DIRS_ALL += $(SRCDIR)
 endif
 
 SRCS = $(shell $(FIND) -L $(SRC_DIRS) -iname '*.java')
@@ -24,7 +24,7 @@ CLASSES_ALL = $(shell $(FIND) -L $(SRC_DIRS_ALL) -iname '*.class')
 
 .SUFFIXES: .java .class
 
-CP := $(SRC_DIRS)
+CP := $(SRC_DIRS_ALL)
 ifneq (,$(JAVA_HOME))
 ifneq (,$(wildcard $(JAVA_HOME)/lib/tools.jar))
 	CP += $(JAVA_HOME)/lib/tools.jar
