@@ -62,7 +62,7 @@ jar: $(TARGET_JAR) ;
 
 .SECONDEXPANSION:
 $(TARGET_JAR): $(SRCS:.java=.class) | $$(@D)/
-	$(JAR) -cfm "$@" "$(MANIFEST_FILE)" $(CLASSES:%='%')
+	$(JAR) -cfm "$@" "$(MANIFEST_FILE)" $(foreach dir,$(SRC_DIRS),$(shell cd $(dir); $(FIND) -L . -iname '*.class' -exec echo -C \'$(dir)\' \'{}\' \;))
 
 .SECONDEXPANSION:
 $(TARGET_NATIVE): $(SRCS) | $$(@D)/
