@@ -62,7 +62,23 @@ jar: $(TARGET_JAR) ;
 
 .SECONDEXPANSION:
 $(TARGET_JAR): $(SRCS:.java=.class) | $$(@D)/
-	$(JAR) -cfm "$@" "$(MANIFEST_FILE)" $(foreach dir,$(SRC_DIRS),$(shell cd $(dir); $(FIND) -L . -iname '*.class' -exec echo -C \'$(dir)\' \'{}\' \;))
+	$(JAR) -cfm "$@" "$(MANIFEST_FILE)" \
+		$(foreach dir,$(SRC_DIRS),$(shell cd $(dir) ; $(FIND) -L . -iname '*.class' -exec echo -C \'$(dir)\' \'{}\' \;))
+# update jar with com.sun.tools.classfile.* classes from this JVM.
+# This is disgusting. Don't do this at home, kids!
+ifneq (,$(wildcard $(JAVA_HOME)/lib/tools.jar))
+	TEMPDIR=`mktemp -d` ; \
+	echo "tempdir = $$TEMPDIR"; cd "$$TEMPDIR" ; \
+	$(JAR) -xf '$(JAVA_HOME)/lib/tools.jar' 'com/sun/tools/classfile' ; \
+	$(JAR) -uf '$(abspath $@)' -C "$$TEMPDIR" . ; \
+	$(RM) -r "$$TEMPDIR"
+else
+	$(warning Cannot add dependencies from tools.jar!)
+endif
+	jar -i "$@"
+# Mark jar as executable so that it can be started as an application
+# through the GUI, binfmt or something
+	chmod +x "$@"
 
 .SECONDEXPANSION:
 $(TARGET_NATIVE): $(SRCS) | $$(@D)/
