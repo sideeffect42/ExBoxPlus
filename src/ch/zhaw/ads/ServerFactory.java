@@ -46,7 +46,16 @@ public class ServerFactory {
 	 * by a fresh createServer.
 	 */
 	public void refresh() {
-		this.classLoader = this.freshClassLoader(this.classLoader);
+		URLClassLoader freshLoader = this.freshClassLoader(this.classLoader);
+		URLClassLoader oldLoader = this.classLoader;
+
+		this.classLoader = freshLoader;
+
+		if (oldLoader != null) {
+			try {
+				oldLoader.close();
+			} catch (IOException e) {}
+		}
 	}
 
 	/**
@@ -239,7 +248,8 @@ public class ServerFactory {
 			numCurrentURLs = loaderURLs.length;
 			urls = new URL[(numCurrentURLs + 1)];
 
-			System.arraycopy((Object)loaderURLs, 0, (Object)urls, 0, loaderURLs.length);
+			System.arraycopy((Object)loaderURLs, 0,
+							 (Object)urls, 0, loaderURLs.length);
 		} else {
 			urls = new URL[1];
 		}
@@ -251,7 +261,7 @@ public class ServerFactory {
 			urls[(urls.length - 1)] = url;
 		} catch (MalformedURLException mue) {}
 
-		this.classLoader = new URLClassLoader(urls, this.classLoader);
+		this.classLoader = URLClassLoader.newInstance(urls, this.classLoader);
 	}
 
 	private String readPackageNameFromClassFile(String path)
